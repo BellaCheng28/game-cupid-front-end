@@ -14,6 +14,7 @@ import { BsPass } from "react-icons/bs";
 import  ViewOtherProfile from "./Components/Match/ViewOtherProfile";
 import MatchList from "./Components/Match/MatchList"
 import { ProfileById } from "./services/profileService";
+import About from "./components/Home/About";
 
 
 export const AuthedUserContext = createContext(null);
@@ -84,6 +85,7 @@ console.log("profile",profile);
           <Route path="/top-game" element={<TopGmaes />} />
           <Route path="/platform" element={<PlatformList />} />
           <Route path="/profile/edit" element={<ProfileHeader />} />
+          <Route path="/about" element={<About />} />
           <Route path="/" element={<MyProfile />} />
           <Route path="/matches" element={<MatchList />} />
           <Route path="/match/otherprofileId" element={<ViewOtherProfile />} />
