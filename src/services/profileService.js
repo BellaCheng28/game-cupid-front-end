@@ -102,3 +102,4 @@ export const genre_scores = async () => {
         throw error;
     }
 }
+
