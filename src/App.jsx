@@ -22,30 +22,6 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   useEffect(() => {
-       const fetchProfile = async () => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      const user = JSON.parse(storedUser); // 解析为对象
-      const userId = user?.id;
-        // console.log("User ID:", userId);
-      if (!userId) {
-        console.error("No userId found in parsed user data");
-        return;
-      }
-      const profileData = await ProfileById(userId);
-      console.log("profileData:", profileData);
-      profileData ? setProfile(profileData) : setProfile(null);
-      console.log("Profile data:", profileData);
-    } catch (error) {
-      console.error("Failed to fetch profileById:", error);
-    }
-  };
-  
-  fetchProfile();
-}, []);
-console.log("profile",profile);
-
-  useEffect(() => {
     const fetchUser = async () => {
       const user = await verifyUser();
       user ? setUser(user) : setUser(null);
@@ -53,7 +29,28 @@ console.log("profile",profile);
 
     fetchUser();
   }, []);
+  console.log("user", user);
 
+  useEffect(() => {
+    if (user && user.id) {
+      const fetchProfile = async () => {
+        try {
+          const userId = user.id; // 获取 ID
+          console.log("userId", userId);
+          const profileData = await ProfileById(userId);
+
+          profileData ? setProfile(profileData) : setProfile(null);
+        } catch (error) {
+          console.error("Failed to fetch profileById:", error);
+        }
+      };
+
+      fetchProfile();
+    }
+  }, [user]);
+// console.log("profile",profile);
+
+  
   const location = useLocation();
   useEffect(() => {
     if (location.state?.updatedProfile) {

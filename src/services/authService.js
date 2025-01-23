@@ -19,8 +19,8 @@ export const signIn = async (credentials) => {
   try {
     const resp = await api.post("/users/login/", credentials);
     localStorage.setItem("token", resp.data.access);
-       localStorage.setItem("user", JSON.stringify(resp.data.user));
-    console.log("user",resp.data.user);
+    //    localStorage.setItem("user", JSON.stringify(resp.data.user));
+    // console.log("user",resp.data.user);
    
   
     return resp.data.user;
@@ -55,7 +55,7 @@ export const deleteUser = async () => {
 export const signOut = async () => {
   try {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    // localStorage.removeItem("user");
     return true;
   } catch (error) {
     throw error;
