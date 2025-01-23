@@ -1,21 +1,17 @@
 
 import { Link } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
-
-
-
-
-const NavBar = ({ user }) => {
-
+import { useContext } from "react";
+import { AuthedUserContext } from "../../App";
+const NavBar = () => {
+ const { user } = useContext(AuthedUserContext);
     return (
       <nav className="fixed w-full bg-violet-900 p-4 text-white shadow-md z-10">
         <div className="container mx-auto flex justify-between items-center">
-          <Link to="/home">
+          <Link to="/">
             <IoHomeOutline size={24} />
           </Link>
 
-         
-           
             <Link to="/matches" className="hover:text-gray-300">
               Matches
             </Link>

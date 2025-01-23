@@ -1,4 +1,3 @@
-
 import axios from "axios";
 
 const getToken = () => {
@@ -9,12 +8,9 @@ const getToken = () => {
 };
 
 const api = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "production"
-      ? "https://cats-collector-cc0956b22063.herokuapp.com/"
-      : "http://localhost:8000",
+  baseURL: "https://gamecupid-fc48081a5cff.herokuapp.com/",
 });
-
+console.log(api.defaults.baseURL);
 api.interceptors.request.use(
   async function (config) {
     const token = await getToken();

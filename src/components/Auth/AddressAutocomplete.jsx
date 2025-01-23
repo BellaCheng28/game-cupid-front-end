@@ -54,14 +54,14 @@ const AddressAutocomplete = ({ onAddressSelect }) => {
         onChange={handleInputChange} // 更新输入框内容
         onClick={(e) => e.stopPropagation()} // 防止点击输入框关闭建议列表
         placeholder="city, state, country"
-        className="w-full p-2 border border-gray-300 rounded"
+        className="w-full p-2 border border-gray-300 rounded text-black"
       />
       {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full max-h-48 overflow-y-auto shadow-lg">
+        <ul className="absolute z-10 bg-gray-100  text-black border border-gray-300 rounded-md mt-1 w-full max-h-48 overflow-y-auto shadow-lg">
           {suggestions.map((address, index) => (
             <li
               key={index}
-              className="p-2 text-sm hover:bg-gray-100 cursor-pointer"
+              className="p-2 text-sm  hover:bg-gray-100 cursor-pointer"
               onClick={() => handleAddressSelect(address)} // 点击后填充地址
             >
               {address}

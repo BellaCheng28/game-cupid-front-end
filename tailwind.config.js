@@ -5,8 +5,13 @@ export default {
     extend: {
       colors: {
         customPurple: "#5951BA",
+        lightPurple: "#5951BA",
+        lightBlue: "#82ACFF",
+      },
+      textShadow: {
+        violet: "2px 2px #5951BA",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-textshadow")],
 };

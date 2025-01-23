@@ -1,32 +1,24 @@
 // SignupForm.jsx
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthedUserContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../../services/authService";
 import AddressAutocomplete from "./AddressAutocomplete";
 
-const SignUp = ({ setUser }) => {
+const SignUp = () => {
+ const { setUser } = useContext(AuthedUserContext);
   const navigate = useNavigate();
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    gender: "",
-    address: "",
     password: "",
     passwordConf: "",
-    isError: false,
-    errorMsg: "",
+    // isError: false,
+    // errorMsg: "",
   });
 
   const { username, email, gender, address, password, passwordConf } = formData;
-
-  const handleAddressSelect = (address) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      address: address.formatted, // 更新 address
-    }));
-    console.log("Selected address:", address);
-  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,12 +30,12 @@ const SignUp = ({ setUser }) => {
     try {
       const userData = await signUp(formData);
       setUser(userData);
-      navigate("/home");
+      navigate("/sign-in");
     } catch (error) {
       console.error(error);
       setFormData((prevForm) => ({
-        isError: true,
-        errorMsg: "Invalid Credentials",
+        // isError: true,
+        // errorMsg: "Invalid Credentials",
         username: prevForm.username,
         email: "",
         password: "",
@@ -108,7 +100,7 @@ const SignUp = ({ setUser }) => {
               required
             />
           </div>
-          <div>
+          {/* <div>
             <label
               htmlFor="gender"
               className="block text-sm font-medium text-white "
@@ -129,6 +121,7 @@ const SignUp = ({ setUser }) => {
               </option>
               <option value="male">He/His</option>
               <option value="female">She/Her</option>
+              <option value="female">/Her</option>
               <option value="others">non-binary</option>
             </select>
           </div>
@@ -141,7 +134,7 @@ const SignUp = ({ setUser }) => {
             </label>
             <AddressAutocomplete />
            
-          </div>
+          </div> */}
 
           <div>
             <label
