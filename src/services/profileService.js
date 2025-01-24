@@ -56,14 +56,24 @@ export const searchGames = async () => {
 
 
 export const getGames = async () => {
-    try {
-        const response = await api.get('/profile/games/');
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching profile games:", error);
-        throw error;
-    }
-}
+  try {
+      // Retrieve the token (e.g., from localStorage or another state management solution)
+      const token = localStorage.getItem('token'); // Or wherever you store the token
+
+      // Configure the Authorization header with the Bearer token
+      const response = await api.get('/profile/games/', {
+          headers: {
+              Authorization: `Bearer ${token}`, // Pass the token here
+          },
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching profile games:", error);
+      throw error;
+  }
+};
+
 
 
 
