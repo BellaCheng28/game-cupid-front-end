@@ -1,5 +1,5 @@
-import { useState,createContext,useContext, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { useState,createContext, useEffect } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { verifyUser } from "./services/authService";
 import NavBar from "./Components/NavBar/NavBar";
 import SignUp from "./Components/Auth/SignUp";
@@ -8,19 +8,27 @@ import SignOut from "./Components/Auth/SignOut";
 import TopGmaes from "./Components/Home/TopGames";
 import PlatformList from "./Components/Home/PlatformList";
 import ProfileHeader from "./Components/Home/ProfileHeader";
-import MyProfile from "./Components/Home/MyProfile";
+import MyProfile from "./Components/Home/myProfile";
 import { useLocation } from "react-router-dom";
 import { BsPass } from "react-icons/bs";
 import  ViewOtherProfile from "./Components/Match/ViewOtherProfile";
 import MatchList from "./Components/Match/MatchList"
 import { ProfileById } from "./services/profileService";
-
+import { signOut } from "./services/authService";
+import About from "./Components/About/About";
+import Platform from "./Components/Home/Platform";
 
 export const AuthedUserContext = createContext(null);
 
 const App = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [favoritePlatforms, setFavoritePlatforms] = useState([]);
+  const[favoriteGames, setFavoriteGames] = useState([]);
+
   useEffect(() => {
     const fetchUser = async () => {
       const user = await verifyUser();
@@ -28,29 +36,25 @@ const App = () => {
     };
 
     fetchUser();
-  }, []);
-  console.log("user", user);
 
+  }, []);
+  // console.log("user", user);
+
+  // 根据用户 ID 获取资料
   useEffect(() => {
     if (user && user.id) {
       const fetchProfile = async () => {
         try {
-          const userId = user.id; // 获取 ID
-          console.log("userId", userId);
-          const profileData = await ProfileById(userId);
-
-          profileData ? setProfile(profileData) : setProfile(null);
-        } catch (error) {
-          console.error("Failed to fetch profileById:", error);
+          const profileData = await ProfileById(user.id);
+          setProfile(profileData || null);
+        } catch (err) {
+          console.error("Failed to fetch profile:", err);
         }
       };
-
       fetchProfile();
     }
   }, [user]);
-// console.log("profile",profile);
 
-  
   const location = useLocation();
   useEffect(() => {
     if (location.state?.updatedProfile) {
@@ -58,6 +62,13 @@ const App = () => {
     }
   }, [location]);
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  
+const handleSignout = () => {
+   signOut();
+   setUser(null);
+}
 
   return (
     <AuthedUserContext.Provider
@@ -66,24 +77,37 @@ const App = () => {
         setUser,
         profile,
         setProfile,
-        // favoritePlatforms,
-        // setFavoritePlatforms,
-        // favoriteGames,
-        // setFavoriteGames,
+        favoritePlatforms,
+        setFavoritePlatforms,
+        favoriteGames,
+        setFavoriteGames,
       }}
     >
-      <NavBar />
+      <NavBar handleSignout={handleSignout} />
       <div className="pt-16">
         <Routes>
+          {user ? (
+            <>
+              <Route path="/top-game" element={<TopGmaes />} />
+              <Route path="/platform" element={<PlatformList />} />
+              <Route path="/profile/edit" element={<ProfileHeader />} />
+              <Route path="/" element={<MyProfile />} />
+              <Route path="/matches" element={<MatchList />} />
+              <Route path="/paltforms" element={<MatchList />} />
+              <Route
+                path="/match/otherprofileId"
+                element={<ViewOtherProfile />} 
+              />
+              {/* <Route path="*" element={<Navigate to="/" />} /> */}
+            </>
+          ) : (
+            <>
+              <Route path="/" element={<SignIn />} />
+              {/* <Route path="*" element={<Navigate to="/" />} /> */}
+            </>
+          )}
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-out" element={<SignOut />} />
-          <Route path="/top-game" element={<TopGmaes />} />
-          <Route path="/platform" element={<PlatformList />} />
-          <Route path="/profile/edit" element={<ProfileHeader />} />
-          <Route path="/" element={<MyProfile />} />
-          <Route path="/matches" element={<MatchList />} />
-          <Route path="/match/otherprofileId" element={<ViewOtherProfile />} />
         </Routes>
       </div>
     </AuthedUserContext.Provider>

@@ -1,46 +1,36 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams,Link } from "react-router-dom";
 import { AuthedUserContext } from "../../App";
-import {profileGames} from "../../services/profileService";
+import { editProfileGames } from "../../services/profileService";
+import { getGames } from "../../services/profileService";
+import { editGames } from "../../services/profileService";
 import { FiMenu } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { IoIosAdd } from "react-icons/io";
 import { ReactSortable } from "react-sortablejs";
+
 const TopGmaes = () =>{
   const { gameId } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  // const [favoriteGames, setFavoriteGames] = useState([]);
+  const [AllGames, setAllGames] = useState([]);
   const { user, favoriteGames, setFavoriteGames } =
     useContext(AuthedUserContext);
-//  if (!user) return null;
-  const AllGames = [
-    {
-      id: 1,
-      title: "Game 1",
-      fav_rank: 1,
-      genres: "Action",
-      is_favorite: false,
-    },
-    {
-      id: 2,
-      title: "Game 2",
-      fav_rank: 2,
-      genres: "Adventure",
-      is_favorite: false,
-    },
-    {
-      id: 3,
-      title: "Game 3",
-      fav_rank: 3,
-      genres: "Puzzle",
-      is_favorite: false,
-    },
-    { id: 4, title: "Game 4", fav_rank: 4, genres: "RPG", is_favorite: false },
-    // 其他游戏数据
-  ];
-  // 处理搜索查询变化
+
+  useEffect(() => {
+    fetchTopGame();
+  }, [user.id]);
+
+   const fetchTopGame = async () => {
+      try {
+        const data = await getGames();
+        setAllGames(data);
+      } catch (error) {
+        console.error("Failed to fetch AllGames:", error);
+      }
+    };
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -52,13 +42,7 @@ const TopGmaes = () =>{
     setSearchResults(filteredGames);
   };
 
-  // useEffect(() => {
-  //   const fetchtopGames = async () => {
-  //     const gamedata = await profileGames(searchQuery);
-  //     setTopGames(gamedata);
-  //   };
-  //   fetchtopGames();
-  // }, [searchQuery]);
+ 
 
   // 点击加号按钮，添加到收藏列表
   const addToFavorite = async (game) => {
@@ -73,7 +57,16 @@ const TopGmaes = () =>{
       g.id === game.id ? updatedGame : g
     );
     setSearchResults(updatedSearchResults); // 更新搜索结果，确保 UI 显示正确
+    try {
+          await editGames(updatedGame);
+          // 如果后端返回了更新后的 favoritePlatforms，直接更新前端状态
+          setFavoriteGames(response.FavoriteGames);
+        } catch (error) {
+          console.error("Error adding game to favorites:", error);
+        }
   };
+
+ 
 
   const removeFromFavorite = async (gameId) => {
     const updatedFavorites = favoriteGames.filter((game) => game.id !== gameId);
@@ -84,21 +77,34 @@ const TopGmaes = () =>{
       game.id === gameId ? { ...game, is_favorite: false } : game
     );
     setSearchResults(updatedSearchResults);
+     try {
+          await editProfileGames(user.id, {
+            id: gameId,
+            is_favorite: false,
+          });
+        } catch (error) {
+          console.error("Error removing game from favorites:", error);
+        }
   };
   // 更新favoriteGames数组中的顺序
-const handleSortEnd = (evt) => {
-  console.log(evt);
-  // 获取拖动前后的新旧索引
-  const { oldIndex, newIndex } = evt;
-  // 如果顺序发生变化
-  if(oldIndex !== newIndex){
-    const updatedFavoriteGames = [...favoriteGames]; // 拷贝 favoriteGames 数组
-    const [movedGame] = updatedFavoriteGames.splice(oldIndex, 1); // 删除旧位置的游戏
-    updatedFavoriteGames.splice(newIndex, 0, movedGame); // 插入到新位置
-    setFavoriteGames(updatedFavoriteGames);
-  }
-
-};
+  const handleSortEnd = async(evt) => {
+    console.log(evt);
+    // 获取拖动前后的新旧索引
+    const { oldIndex, newIndex } = evt;
+    // 如果顺序发生变化
+    if (oldIndex !== newIndex) {
+      const updatedFavoriteGames = [...favoriteGames]; // 拷贝 favoriteGames 数组
+      const [movedGame] = updatedFavoriteGames.splice(oldIndex, 1); // 删除旧位置的游戏
+      updatedFavoriteGames.splice(newIndex, 0, movedGame); // 插入到新位置
+      setFavoriteGames(updatedFavoriteGames);
+      
+       try {
+    // 发送排序后的游戏数据到后端
+    await editProfileGames(updatedFavoriteGames);  // 注意传递正确的排序后的数据
+  } catch (error) {
+    console.error("Error updating game order:", error);
+    }
+  };
 
   return (
     <div className=" min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 ">
@@ -189,5 +195,6 @@ const handleSortEnd = (evt) => {
   );
 }
 
+}
 export default TopGmaes;
 

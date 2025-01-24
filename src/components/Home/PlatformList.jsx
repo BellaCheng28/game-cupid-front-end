@@ -1,51 +1,39 @@
 import { useEffect, useState, useContext } from "react";
-import { useNavigate, useParams,Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { AuthedUserContext } from "../../App";
 import { profilePlateforms } from "../../services/profileService";
+import { editProfilePlatforms } from "../../services/profileService";
 import { FiMenu } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { IoIosAdd } from "react-icons/io";
 import { ReactSortable } from "react-sortablejs";
 const PlatformList = () => {
-  const { user, favoritePlatforms, setFavoritePlatforms } =
-    useContext(AuthedUserContext);
+  const { user } = useContext(AuthedUserContext);
+  // const user = localStorage.getItem("user");
   const { platformId } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-//   const [favoritePlatforms, setFavoritePlatforms] = useState([]);
-  //   if (!user) return null;
+  const [Platforms, setPlatforms] = useState([]);
+  const [favoritePlatforms, setFavoritePlatforms] = useState([]);
+  console.log("user", user);
+  console.log("user.id", user.id);
+  // const user_ = JSON.parse(user);
+  // const user_id = user_.id;
+  // console.log("user.id", user_id);
+  useEffect(() => {
+    fetchPlatforms();
+  }, [user.id]);
+  const fetchPlatforms = async () => {
+    try {
+      const data = await profilePlateforms(user.id);
+      setPlatforms(data);
+    } catch (error) {
+      console.error("Failed to fetch platforms:", error);
+    }
+  };
 
-  const AllPlatforms = [
-    {
-      id: 1,
-      brand: "PC",
-      tag: "Windows",
-    },
-    {
-      id: 2,
-      brand: "PlayStation 5",
-      tag: "Exclusive",
-    },
-    {
-      id: 3,
-      brand: "PlayStation 4",
-      tag: "Console",
-    },
-    {
-      id: 4,
-      brand: "Xbox Series",
-      tag: "Exclusive",
-    },
-  ];
-
-  //   useEffect(() => {
-  //     const fetchPlatforms = async () => {
-  //       const data = await profilePlateforms();
-  //       setPlatforms(data);
-  //     };
-  //     fetchPlatforms();
-  //   }, []);
+  
 
   // 处理搜索查询变化
   const handleSearchChange = (e) => {
@@ -53,18 +41,18 @@ const PlatformList = () => {
   };
 
   const handleSearch = () => {
-    const filteredPlatforms = AllPlatforms.filter((platform) =>
+    const filteredPlatforms = Platforms.filter((platform) =>
       platform.brand.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setSearchResults(filteredPlatforms);
   };
   const addToFavorite = async (platform) => {
-    // 如果游戏已经收藏了，不再添加
+    // 如果平台已经收藏了，不再添加
     if (platform.is_favorite) return;
-    // 更新游戏的 is_favorite 状态
+    // 更新平台的 is_favorite 状态
     const updatedPlatform = { ...platform, is_favorite: true };
-    9;
-    // 将游戏加入收藏列表
+
+    //  本地更新 favoritePlatforms，立即反映到 UI
     setFavoritePlatforms((prevFavorites) => [
       ...prevFavorites,
       updatedPlatform,
@@ -74,6 +62,15 @@ const PlatformList = () => {
       p.id === platform.id ? updatedPlatform : p
     );
     setSearchResults(updatedSearchResults); // 更新搜索结果，确保 UI 显示正确
+
+    // 调用后端更新
+    try {
+      await editProfilePlatforms(user.id, updatedPlatform);
+      // 如果后端返回了更新后的 favoritePlatforms，直接更新前端状态
+      setFavoritePlatforms(response.favoritePlatforms);
+    } catch (error) {
+      console.error("Error adding platform to favorites:", error);
+    }
   };
 
   const removeFromFavorite = async (platformId) => {
@@ -89,7 +86,18 @@ const PlatformList = () => {
         : platform
     );
     setSearchResults(updatedSearchResults);
+
+    // 调用后端删除
+    try {
+      await editProfilePlatforms(user.id, {
+        id: platformId,
+        is_favorite: false,
+      });
+    } catch (error) {
+      console.error("Error removing platform from favorites:", error);
+    }
   };
+
   // 更新favoriteGames数组中的顺序
   const handleSortEnd = (evt) => {
     console.log(evt);
@@ -98,7 +106,7 @@ const PlatformList = () => {
     // 如果顺序发生变化
     if (oldIndex !== newIndex) {
       const updatedFavoritePlatforms = [...favoritePlatforms]; // 拷贝 favoriteGames 数组
-      const [movedGame] = updatedFavoritePlatforms.splice(oldIndex, 1); // 删除旧位置的游戏
+      const [movedGame] = updatedFavoritePlatforms.splice(oldIndex, 1); // 
       updatedFavoritePlatforms.splice(newIndex, 0, movedGame); // 插入到新位置
       setFavoritePlatforms(updatedFavoritePlatforms);
     }
@@ -192,6 +200,5 @@ const PlatformList = () => {
     </div>
   );
 };
-
 
 export default PlatformList;

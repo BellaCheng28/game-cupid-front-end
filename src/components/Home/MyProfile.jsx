@@ -5,12 +5,11 @@ import { CiLocationOn } from "react-icons/ci";
 import { CiUser } from "react-icons/ci";
 import { CiEdit } from "react-icons/ci";
 
-
-// favoritePlatforms, favoriteGames 
+// favoritePlatforms, favoriteGames
 const MyProfile = () => {
-    const { profile} =
-      useContext(AuthedUserContext);  
-  console.log("MyProfile",profile);
+  const { user, profile, favoritePlatforms, favoriteGames } =
+    useContext(AuthedUserContext);
+  console.log("MyProfile", user);
   return (
     <>
       <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 flex flex-row flex-wrap justify-evenly">
@@ -36,12 +35,12 @@ const MyProfile = () => {
             <p>Gender:{profile.gender}</p>
             <div className="flex items-center space-x-2">
               <CiLocationOn size={24} />
-              <p className="flex-1 text-xs">{profile.location}</p>
+              <p className="flex-1 text-xs">{profile.city}</p>
             </div>
           </div>
         </div>
         {/* Platforms */}
-        {/* <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[300px] max-h-[400px] flex-col items-center m-3">
+        <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[300px] max-h-[400px] flex-col items-center m-3">
           <h2 className="p-2">Platforms</h2>
           <div className="relative w-full flex justify-end">
             <Link to="/platform">
@@ -71,9 +70,9 @@ const MyProfile = () => {
               </li>
             ))}
           </ul>
-        </div> */}
+        </div>
         {/* Top Games */}
-        {/* <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[300px] max-h-[400px] flex-col items-center m-3">
+        <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[300px] max-h-[400px] flex-col items-center m-3">
           <h2 className="p-2">Top Games</h2>
           <div className="relative w-full flex justify-end">
             <Link to="/top-game">
@@ -100,7 +99,7 @@ const MyProfile = () => {
               </li>
             ))}
           </ul>
-        </div> */}
+        </div>
       </div>
     </>
   );

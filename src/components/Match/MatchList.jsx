@@ -1,47 +1,8 @@
 import React, { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 const MatchList = () => {
-  // 假设从后台获取的用户数据
-  const profiles = [
-    {
-      profile: {
-        id: 1,
-        username: "Alice",
-        emial: "123@gmail.com",
-        gender: "he/she",
-        city: "New York",
-      },
-      games: ["The Witcher 3", "Elden Ring"],
-      platforms: ["PC", "PlayStation"],
-    },
-    {
-      profile: {
-        id: 2,
-        username: "Bob",
-        emial: "145@gmail.com",
-        gender: "he/she",
-        city: "New York",
-      },
-      games: ["Cyberpunk 2077", "Elden Ring"],
-      platforms: ["PC"],
-    },
-    {
-      profile: {
-        id: 3,
-        username: "Charlie",
-        emial: "345@gmail.com",
-        gender: "he/she",
-        city: "New York",
-      },
-      games: ["The Witcher 3", "Cyberpunk 2077"],
-      platforms: ["Xbox"],
-    },
-  ];
-  const [currentUser] = useState({
-    name: "You",
-    games: ["Elden Ring", "Cyberpunk 2077"],
-    platforms: ["PC", "Xbox"],
-  }); // 当前用户
+  const [profiles, setProfiles] = useState([]); // 所有用户的资料
+ 
   const [matchedUsers, setMatchedUsers] = useState([]); // 匹配的用户列表
   const [selectedMatch, setSelectedMatch] = useState(null); // 选中的用户
   // 找出所有匹配用户
