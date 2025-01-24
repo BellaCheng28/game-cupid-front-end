@@ -6,7 +6,9 @@ import SignUp from "./Components/Auth/SignUp";
 import SignIn from "./Components/Auth/SignIn";
 import SignOut from "./Components/Auth/SignOut";
 import TopGmaes from "./Components/Home/TopGames";
+// import MyGames from "./Components/Home/MyGames";
 import PlatformList from "./Components/Home/PlatformList";
+import Platform from "./Components/Home/Platform";
 import ProfileHeader from "./Components/Home/ProfileHeader";
 import MyProfile from "./Components/Home/myProfile";
 import { useLocation } from "react-router-dom";
@@ -16,7 +18,7 @@ import MatchList from "./Components/Match/MatchList"
 import { ProfileById } from "./services/profileService";
 import { signOut } from "./services/authService";
 import About from "./Components/About/About";
-import Platform from "./Components/Home/Platform";
+
 
 export const AuthedUserContext = createContext(null);
 
@@ -93,10 +95,12 @@ const handleSignout = () => {
               <Route path="/profile/edit" element={<ProfileHeader />} />
               <Route path="/" element={<MyProfile />} />
               <Route path="/matches" element={<MatchList />} />
-              <Route path="/paltforms" element={<MatchList />} />
+              <Route path="/brand" element={<Platform />} />
+              {/* <Route path="/mygames" element={<MyGames />} /> */}
+
               <Route
                 path="/match/otherprofileId"
-                element={<ViewOtherProfile />} 
+                element={<ViewOtherProfile />}
               />
               {/* <Route path="*" element={<Navigate to="/" />} /> */}
             </>

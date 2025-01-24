@@ -1,9 +1,12 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams,Link } from "react-router-dom";
 import { AuthedUserContext } from "../../App";
-import { editProfileGames } from "../../services/profileService";
-import { getGames } from "../../services/profileService";
-import { editGames } from "../../services/profileService";
+import {
+  searchGames,
+  getGames,
+  addProfileGames,
+  editProfileGames,
+} from "../../services/profileService";
 import { FiMenu } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
@@ -24,7 +27,7 @@ const TopGmaes = () =>{
 
    const fetchTopGame = async () => {
       try {
-        const data = await getGames();
+        const data = await searchGames();
         setAllGames(data);
       } catch (error) {
         console.error("Failed to fetch AllGames:", error);

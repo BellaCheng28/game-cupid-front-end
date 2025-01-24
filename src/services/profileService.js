@@ -44,6 +44,17 @@ export const viewOtherProfile = async (userId) => {
   }
 };
 
+export const searchGames = async () => {
+  try {
+    const response = await api.get("/games/search/");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching games:", error);
+    throw error;
+  }
+};
+
+
 export const getGames = async () => {
     try {
         const response = await api.get('/profile/games/');
@@ -54,7 +65,9 @@ export const getGames = async () => {
     }
 }
 
-export const editGames = async (gameData) => {
+
+
+export const addProfileGames = async (gameData) => {
     try {
         const response = await api.put('/profile/games/add/', gameData);
         return response.data;
@@ -75,23 +88,42 @@ export const editProfileGames = async (gameData) => {
 };
 
 
-export const profilePlateforms = async (userId) => {
+export const Platforms = async () => {
     try {
-        const response = await api.get(`/profile/platforms/${userId}/`);
+        const response = await api.get("/profile/platforms/choices/");
         return response.data;
     } catch (error) {
         console.error("Error fetching profile platforms:", error);
         throw error;
     }
 }
+// 获取用户平台列表
+export const profilePlatforms = async (userId) => {
+  try {
+    const response = await api.get(`/profile/platforms/${userId}/`);
+    return response.data; // 返回平台列表
+  } catch (error) {
+    console.error("Error fetching profile platforms:", error);
+    throw error;
+  }
+};
 
+// 添加新平台到用户的列表
+export const addProfilePlatform = async (userId, platformData) => {
+  try {
+    const response = await api.post(`/profile/platforms/${userId}/`, platformData);
+    return response.data; // 返回新创建的记录
+  } catch (error) {
+    console.error("Error adding profile platform:", error);
+    throw error;
+  }
+};
+
+// 更新或删除用户平台
 export const editProfilePlatforms = async (userId, platformData) => {
   try {
-    const response = await api.put(
-      `/profile/platforms/${userId}/edit/`,
-      platformData
-    );
-    return response.data; // Return the updated data
+    const response = await api.put(`/profile/platforms/${userId}/edit/`, platformData);
+    return response.data; // 返回更新后的数据
   } catch (error) {
     console.error("Error updating profile platforms:", error);
     throw error;

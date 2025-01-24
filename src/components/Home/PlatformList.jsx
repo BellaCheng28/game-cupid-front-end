@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { AuthedUserContext } from "../../App";
-import { profilePlateforms } from "../../services/profileService";
+import { profilePlatforms } from "../../services/profileService";
 import { editProfilePlatforms } from "../../services/profileService";
 import { FiMenu } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
@@ -26,7 +26,7 @@ const PlatformList = () => {
   }, [user.id]);
   const fetchPlatforms = async () => {
     try {
-      const data = await profilePlateforms(user.id);
+      const data = await Platforms();
       setPlatforms(data);
     } catch (error) {
       console.error("Failed to fetch platforms:", error);
@@ -99,18 +99,18 @@ const PlatformList = () => {
   };
 
   // 更新favoriteGames数组中的顺序
-  const handleSortEnd = (evt) => {
-    console.log(evt);
-    // 获取拖动前后的新旧索引
-    const { oldIndex, newIndex } = evt;
-    // 如果顺序发生变化
-    if (oldIndex !== newIndex) {
-      const updatedFavoritePlatforms = [...favoritePlatforms]; // 拷贝 favoriteGames 数组
-      const [movedGame] = updatedFavoritePlatforms.splice(oldIndex, 1); // 
-      updatedFavoritePlatforms.splice(newIndex, 0, movedGame); // 插入到新位置
-      setFavoritePlatforms(updatedFavoritePlatforms);
-    }
-  };
+  // const handleSortEnd = (evt) => {
+  //   console.log(evt);
+  //   // 获取拖动前后的新旧索引
+  //   const { oldIndex, newIndex } = evt;
+  //   // 如果顺序发生变化
+  //   if (oldIndex !== newIndex) {
+  //     const updatedFavoritePlatforms = [...favoritePlatforms]; // 拷贝 favoriteGames 数组
+  //     const [movedGame] = updatedFavoritePlatforms.splice(oldIndex, 1); // 
+  //     updatedFavoritePlatforms.splice(newIndex, 0, movedGame); // 插入到新位置
+  //     setFavoritePlatforms(updatedFavoritePlatforms);
+  //   }
+  // };
 
   return (
     <div className=" min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 ">
