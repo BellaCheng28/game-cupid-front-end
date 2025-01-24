@@ -14,7 +14,7 @@ import { BsPass } from "react-icons/bs";
 import  ViewOtherProfile from "./Components/Match/ViewOtherProfile";
 import MatchList from "./Components/Match/MatchList"
 import { ProfileById } from "./services/profileService";
-import like from "./Components/Match/Like";
+import like from "./components/Match/Like";
 
 
 export const AuthedUserContext = createContext(null);
@@ -89,7 +89,7 @@ console.log("profile",profile);
           <Route path="/matches" element={<MatchList />} />
           <Route path="/match/otherprofileId" element={<ViewOtherProfile />} />
         </Routes>
-        <Routes path= "match/like" element={<Like />}  ></Routes>
+        <Routes path= "match/like" element={<like />}  ></Routes>
       </div>
     </AuthedUserContext.Provider>
   );

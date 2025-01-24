@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { likeProfile } from '../../services/profileService';
 
 const Like = () => {
     const [likedProfiles, setLikedProfiles] = useState([]);
@@ -9,7 +7,9 @@ const Like = () => {
         // Fetch liked profiles from the server
         const fetchLikedProfiles = async () => {
             try {
-                const response = await likeProfile ()
+                const response = await fetch('/api/liked-profiles');
+                const data = await response.json();
+                setLikedProfiles(data);
             } catch (error) {
                 console.error('Error fetching liked profiles:', error);
             }
