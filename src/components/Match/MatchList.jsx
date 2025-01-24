@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 const MatchList = () => {
   // 假设从后台获取的用户数据
@@ -65,6 +66,7 @@ const MatchList = () => {
   };
 
   return (
+    // 显示当前用户信息;  
     <div className="p-4">
       <h1> username: {currentUser.username}</h1>
       <ul>
@@ -111,6 +113,15 @@ const MatchList = () => {
           </ul>
         </div>
       )}
+      <div>
+      <Link to ="/like">
+        <button className="mt-4 p-2 bg-blue-500 text-white rounded">
+          Like
+          </button >
+      
+      
+      </Link>
+      </div>
     </div>
   );
 };
