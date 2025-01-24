@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { likeProfile } from '../../services/matches';
 
 const Like = () => {
     const [likedProfiles, setLikedProfiles] = useState([]);
@@ -7,7 +8,7 @@ const Like = () => {
         // Fetch liked profiles from the server
         const fetchLikedProfiles = async () => {
             try {
-                const response = await fetch('profile/match/add/');
+                const response = await likeProfile();
                 const data = await response.json();
                 setLikedProfiles(data);
                 console.log('Liked profiles:', data);

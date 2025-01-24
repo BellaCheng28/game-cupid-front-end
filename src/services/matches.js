@@ -12,7 +12,7 @@ export const viewMatches = async () => {
 
 export const likeProfile = async () => {
     try {
-        const response = await api.put('/matches/like');
+        const response = await api.get(`profile/match/${userid}`);
         return response.data;
     } catch (error) {
         console.error("Error liking profile:", error);
