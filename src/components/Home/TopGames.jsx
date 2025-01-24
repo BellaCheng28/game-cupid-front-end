@@ -13,35 +13,36 @@ import { CiSearch } from "react-icons/ci";
 import { IoIosAdd } from "react-icons/io";
 import { ReactSortable } from "react-sortablejs";
 
-const TopGmaes = () =>{
-  const { gameId } = useParams();
+const TopGames = () =>{
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [AllGames, setAllGames] = useState([]);
-  const { user, favoriteGames, setFavoriteGames } =
+  const [profileGames, setProfileGames] = useState([]);
+  const { user } =
     useContext(AuthedUserContext);
 
   useEffect(() => {
-    fetchTopGame();
-  }, [user.id]);
-
-   const fetchTopGame = async () => {
+    const fetchProfileGames = async () => {
       try {
-        const data = await searchGames();
-        setAllGames(data);
+        const data = await getGames(user.id);
+        setProfileGames(data);
       } catch (error) {
         console.error("Failed to fetch AllGames:", error);
       }
     };
+    
+    fetchProfileGames();
+  }, [user.id]);
+
+  useEffect(() => {
+    console.log("Updated profileGames:", profileGames);
+  }, [profileGames]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleSearch = () => {
-    const filteredGames = AllGames.filter((game) =>
-      game.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const handleSearch = async () => {
+    const filteredGames = await searchGames(searchQuery);
     setSearchResults(filteredGames);
   };
 
@@ -199,5 +200,5 @@ const TopGmaes = () =>{
 }
 
 }
-export default TopGmaes;
+export default TopGames;
 

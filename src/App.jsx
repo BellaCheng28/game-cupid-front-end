@@ -1,20 +1,20 @@
 import { useState,createContext, useEffect } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { verifyUser } from "./services/authService";
-import NavBar from "./Components/NavBar/NavBar";
-import SignUp from "./Components/Auth/SignUp";
-import SignIn from "./Components/Auth/SignIn";
-import SignOut from "./Components/Auth/SignOut";
-import TopGmaes from "./Components/Home/TopGames";
+import NavBar from "./components/NavBar/NavBar";
+import SignUp from "./components/Auth/SignUp";
+import SignIn from "./components/Auth/SignIn";
+import SignOut from "./components/Auth/SignOut";
+import TopGames from "./components/Home/TopGames";
 // import MyGames from "./Components/Home/MyGames";
-import PlatformList from "./Components/Home/PlatformList";
-import Platform from "./Components/Home/Platform";
-import ProfileHeader from "./Components/Home/ProfileHeader";
-import MyProfile from "./Components/Home/myProfile";
+import PlatformList from "./components/Home/PlatformList";
+import Platform from "./components/Home/Platform";
+import ProfileHeader from "./components/Home/ProfileHeader";
+import MyProfile from "./components/Home/myProfile";
 import { useLocation } from "react-router-dom";
 import { BsPass } from "react-icons/bs";
-import  ViewOtherProfile from "./Components/Match/ViewOtherProfile";
-import MatchList from "./Components/Match/MatchList"
+import  ViewOtherProfile from "./components/Match/ViewOtherProfile";
+import MatchList from "./components/Match/MatchList"
 import { ProfileById } from "./services/profileService";
 import { signOut } from "./services/authService";
 import About from "./Components/About/About";
@@ -90,7 +90,7 @@ const handleSignout = () => {
         <Routes>
           {user ? (
             <>
-              <Route path="/top-game" element={<TopGmaes />} />
+              <Route path="/top-game" element={<TopGames />} />
               <Route path="/platform" element={<PlatformList />} />
               <Route path="/profile/edit" element={<ProfileHeader />} />
               <Route path="/" element={<MyProfile />} />
