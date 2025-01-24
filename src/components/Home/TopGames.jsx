@@ -55,7 +55,7 @@ const TopGames = () =>{
     // 更新游戏的 is_favorite 状态
     const updatedGame = { ...game, is_favorite: true };
     // 将游戏加入收藏列表
-    setFavoriteGames((prevFavorites) => [...prevFavorites, updatedGame]);
+    setProfileGames((prevProfileGames) => [...prevProfileGames, updatedGame]);
     // 更新 searchResults，将已收藏的游戏标记为收藏
     const updatedSearchResults = searchResults.map((g) =>
       g.id === game.id ? updatedGame : g
@@ -97,44 +97,43 @@ const TopGames = () =>{
     const { oldIndex, newIndex } = evt;
     // 如果顺序发生变化
     if (oldIndex !== newIndex) {
-      const updatedFavoriteGames = [...favoriteGames]; // 拷贝 favoriteGames 数组
-      const [movedGame] = updatedFavoriteGames.splice(oldIndex, 1); // 删除旧位置的游戏
-      updatedFavoriteGames.splice(newIndex, 0, movedGame); // 插入到新位置
-      setFavoriteGames(updatedFavoriteGames);
+      const updatedProfileGames = [...profileGames]; // 拷贝 favoriteGames 数组
+      const [movedGame] = updatedProfileGames.splice(oldIndex, 1); // 删除旧位置的游戏
+      updatedProfileGames.splice(newIndex, 0, movedGame); // 插入到新位置
+      setProfileGames(updatedProfileGames);
       
        try {
     // 发送排序后的游戏数据到后端
-    await editProfileGames(updatedFavoriteGames);  // 注意传递正确的排序后的数据
+    await editProfileGames(updatedProfileGames);  // 注意传递正确的排序后的数据
   } catch (error) {
     console.error("Error updating game order:", error);
     }
   };
 
   return (
-    <div className=" min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 ">
-      <div className="container  w-full mx-auto flex flex-col  justify-start max-w-[800px] max-h-[800px] flex-wrap">
-        {/* search games */}
-        <div className="flex  items-center space-y-2 ">
+    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800">
+      <div className="container w-full mx-auto flex flex-col max-w-[800px]">
+        {/* Search Section */}
+        <div className="flex items-center space-y-2">
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="Search for a game"
-            className="border p-2 rounded-md "
+            className="border p-2 rounded-md"
           />
-          <button onClick={handleSearch} className="ml-2 text-white ">
+          <button onClick={handleSearch} className="ml-2 text-white">
             <CiSearch size={24} />
           </button>
-          <div>
-            <Link to="/">
-              <button className="bg-blue-500 text-white p-2 rounded m-3">
-                Go back home
-              </button>
-            </Link>
-          </div>
+          <Link to="/">
+            <button className="bg-blue-500 text-white p-2 rounded m-3">
+              Go back home
+            </button>
+          </Link>
         </div>
-        {/* display search results */}
-        <div className="text-white ">
+
+        {/* Search Results */}
+        <div className="text-white">
           {searchResults.length > 0 ? (
             <ul>
               {searchResults.map(
@@ -142,12 +141,9 @@ const TopGames = () =>{
                   !game.is_favorite && (
                     <li
                       key={game.id}
-                      className="flex items-center  justify-between p-2 m-2 bg-blue-500 rounded "
+                      className="flex items-center justify-between p-2 m-2 bg-blue-500 rounded"
                     >
-                      <span className="flex-1 text-left">{game.title}</span>
-                      <span className="flex-1 text-left">{game.fav_rank}</span>
-                      <span className="flex-1 text-left">{game.genres}</span>
-
+                      <span>{game.title}</span>
                       <button
                         onClick={() => addToFavorite(game)}
                         disabled={game.is_favorite}
@@ -163,33 +159,26 @@ const TopGames = () =>{
             <p>No games found</p>
           )}
         </div>
-        {/* display favorite games */}
-        <div className="text-white ">
+
+        {/* Favorite Games */}
+        <div className="text-white">
           <h2 className="mt-1">Top Games</h2>
           <ReactSortable
-            list={favoriteGames}
-            setList={setFavoriteGames}
+            list={profileGames}
+            setList={setProfileGames}
             onEnd={handleSortEnd}
             tag="ul"
-            className="space-y-2 "
+            className="space-y-2"
           >
-            {favoriteGames.map((game) => (
+            {profileGames.map((game) => (
               <li
                 key={game.id}
-                data-id={game.id} // 添加 data-id 属性
-                className="flex justify-between items-center p-2 bg-blue-500 rounded "
+                className="flex justify-between items-center p-2 bg-blue-500 rounded"
               >
-                <span className="flex-1 text-left">{game.title}</span>
-                <span className="flex-1 text-left">{game.fav_rank}</span>
-                <span className="flex-1 text-left">{game.genres}</span>
-                <div className="flex items-center space-x-2">
-                  <button className="p-1  text-white rounded">
-                    <FiMenu size={24} />
-                  </button>
-                  <button onClick={() => removeFromFavorite(game.id)}>
-                    <MdDeleteOutline size={24} />
-                  </button>
-                </div>
+                <span>{game.title}</span>
+                <button onClick={() => removeFromFavorite(game.id)}>
+                  <MdDeleteOutline size={24} />
+                </button>
               </li>
             ))}
           </ReactSortable>
@@ -197,7 +186,7 @@ const TopGames = () =>{
       </div>
     </div>
   );
-}
+};
 
 }
 export default TopGames;
