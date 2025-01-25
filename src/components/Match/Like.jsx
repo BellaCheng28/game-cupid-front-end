@@ -11,7 +11,7 @@ const Like = () => {
                 const response = await likeProfile();
                 const data = await response.json();
                 setLikedProfiles(data);
-                console.log('Liked profiles:', data);
+                console.log('Liked profiles:', JSON.stringify(data, null, 2));
             } catch (error) {
                 console.error('Error fetching liked profiles:', error);
             }
