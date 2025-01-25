@@ -1,14 +1,29 @@
-import React from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AddressAutocomplete from "../Auth/AddressAutocomplete"; // 你的地址选择组件
-import { useContext, useState } from "react";
+
 import { AuthedUserContext } from "../../App";
 
+import { editProfile } from "../../services/profileService";
 
 const ProfileHeader = () => {
- const { profile,setProfile } = useContext(AuthedUserContext);
-       
+  const { user, profile, setProfile} = useContext(AuthedUserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && user.id) {
+      const fetchProfile = async () => {
+        try {
+          const userId = user.id; // 获取 ID
+          const updatedProfile = await editProfile(userId, profile); //TODO not sure if needed
+          setProfile(updatedProfile);
+        } catch (error) {
+          console.error("Failed to fetch profile:", error);
+        }
+      };
+      fetchProfile();
+    }
+  }, [user]);
 
   // 处理表单输入变化
   const handleProfileChange = (e) => {
@@ -18,15 +33,16 @@ const ProfileHeader = () => {
 
   // 处理地址选择
   const handleAddressSelect = (address) => {
-    setProfile((prev) => ({ ...prev, location: address }));
+    setProfile((prev) => ({ ...prev, city: address }));
   };
 
   // 提交更新后的 profile
-  const handleUpdateProfile = (e) => {
+  const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    await editProfile(user.id,profile)
     alert("Profile updated successfully!");
     // 提交成功后跳转回首页，带上更新后的 profile
-    navigate("/", );
+    navigate("/");
   };
 
   return (
@@ -86,10 +102,10 @@ const ProfileHeader = () => {
               <option value="" disabled>
                 Select Gender
               </option>
-              <option value="male">he/him</option>
-              <option value="female">she/her</option>
-              <option value="female">they/them</option>
-              <option value="others">non-binary</option>
+              <option >he/him</option>
+              <option >she/her</option>
+              <option >they/them</option>
+              <option >non-binary</option>
             </select>
           </div>
           <div>
@@ -97,7 +113,7 @@ const ProfileHeader = () => {
               htmlFor="address"
               className="block text-sm font-medium text-white"
             >
-              Location:
+             City
             </label>
             <AddressAutocomplete onAddressSelect={handleAddressSelect} />
           </div>
