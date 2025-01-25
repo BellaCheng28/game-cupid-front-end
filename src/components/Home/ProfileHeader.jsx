@@ -9,10 +9,11 @@ import { editProfile } from "../../services/profileService";
 const ProfileHeader = () => {
   const { user, profile, setProfile} = useContext(AuthedUserContext);
   const navigate = useNavigate();
-
+//  console.log("profile", profile)
+//  console.log("user", user)
   useEffect(() => {
-    if (user && user.id) {
-      console.log(user.id)
+    if (user && user.id && !profile) {
+      console.log(user.id);
       const fetchProfile = async () => {
         try {
           const userId = user.id; // 获取 ID
@@ -24,7 +25,7 @@ const ProfileHeader = () => {
       };
       fetchProfile();
     }
-  }, [user]);
+  }, [user,profile, setProfile]);
 
   // 处理表单输入变化
   const handleProfileChange = (e) => {

@@ -28,7 +28,7 @@ const App = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [favoritePlatforms, setFavoritePlatforms] = useState([]);
+  const [userPlatforms, setUserPlatforms] = useState([]);
   const[favoriteGames, setFavoriteGames] = useState([]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const App = () => {
     fetchUser();
 
   }, []);
-  // console.log("user", user);
+  console.log("user", user);
 
   // 根据用户 ID 获取资料
   useEffect(() => {
@@ -48,6 +48,7 @@ const App = () => {
       const fetchProfile = async () => {
         try {
           const profileData = await ProfileById(user.id);
+          console.log("Fetched profile data:", profileData);
           setProfile(profileData || null);
         } catch (err) {
           console.error("Failed to fetch profile:", err);
@@ -79,8 +80,8 @@ const handleSignout = () => {
         setUser,
         profile,
         setProfile,
-        favoritePlatforms,
-        setFavoritePlatforms,
+        userPlatforms,
+        setUserPlatforms,
         favoriteGames,
         setFavoriteGames,
       }}

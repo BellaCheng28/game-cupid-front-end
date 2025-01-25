@@ -109,7 +109,7 @@ export const profilePlatforms = async (userId) => {
 };
 
 // 添加新平台到用户的列表
-export const addProfilePlatform = async (userId, platformData) => {
+export const addProfilePlatform = async (userId,platformData) => {
   try {
     const response = await api.post(`/profile/platforms/${userId}/`, platformData);
     return response.data; // 返回新创建的记录
@@ -120,9 +120,12 @@ export const addProfilePlatform = async (userId, platformData) => {
 };
 
 // 更新或删除用户平台
-export const editProfilePlatforms = async (userId, platformData) => {
+export const editProfilePlatforms = async (userId,platformId, platformData) => {
   try {
-    const response = await api.put(`/profile/platforms/${userId}/edit/`, platformData);
+    const response = await api.delete(
+      `/profile/platforms/${platformId}/edit/`,
+      platformData
+    );
     return response.data; // 返回更新后的数据
   } catch (error) {
     console.error("Error updating profile platforms:", error);
