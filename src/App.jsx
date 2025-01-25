@@ -2,6 +2,7 @@ import { useState, createContext, useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { verifyUser, signOut } from "./services/authService";
 import { ProfileById } from "./services/profileService";
+import Like from "./components/Match/Like";
 
 import NavBar from "./components/NavBar/NavBar";
 import SignUp from "./components/Auth/SignUp";
@@ -99,6 +100,7 @@ const App = () => {
       <NavBar handleSignout={handleSignOut} />
       <div className="pt-16">
         <Routes>
+
           {user ? (
             <>
               <Route path="/top-game" element={<TopGames />} />
@@ -120,6 +122,7 @@ const App = () => {
           {/* Redirect unmatched routes */}
           <Route path="*" element={<Navigate to={user ? "/" : "/sign-in"} />} />
         </Routes>
+       
       </div>
     </AuthedUserContext.Provider>
   );

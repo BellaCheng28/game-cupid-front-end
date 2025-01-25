@@ -1,10 +1,9 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 const MatchList = () => {
-  const [profiles, setProfiles] = useState([]); // 所有用户的资料
- 
-  const [matchedUsers, setMatchedUsers] = useState([]); // 匹配的用户列表
-  const [selectedMatch, setSelectedMatch] = useState(null); // 选中的用户
+const [matchedUsers, setMatchedUsers] = useState([]); // 匹配的用户列表
+const [selectedMatch, setSelectedMatch] = useState(null); // 选中的用户
   // 找出所有匹配用户
     const findMatches = () => {
       const matches = profiles.filter((user) => {
@@ -20,12 +19,30 @@ const MatchList = () => {
 
   const handleSelectMatch = (userId) => {
     const matchedUser = matchedUsers.find((user) => user.profile.id === userId);
+    console.log("Selected match:", matchedUser);
     if (matchedUser) {
       setSelectedMatch(matchedUser); // 不需要重复筛选
     }
   };
 
+  const handleLike = () => {
+    if (selectedMatch) {
+      const updatedProfiles = profiles.map((user) => {
+        if (user.profile.id === selectedMatch.profile.id) {
+          return {
+            ...user,
+            liked: true, // 添加 liked 属性
+          };
+        }
+        return user;
+      });
+      console.log("Like user:", selectedMatch);
+      console.log("Updated profiles:", updatedProfiles);
+    }
+  };
+
   return (
+    // 显示当前用户信息;  
     <div className="p-4">
       <h1> username: {currentUser.username}</h1>
       <ul>
@@ -51,7 +68,7 @@ const MatchList = () => {
                   className="text-blue-600 underline"
                   onClick={() => handleSelectMatch(user.profile.id)}
                 >
-                  {user.profile.name}
+                  {user.profile.username}
                 </button>
               </li>
             ))}
@@ -62,16 +79,24 @@ const MatchList = () => {
       {selectedMatch && (
         <div className="mt-4 border p-4 rounded bg-green-100">
           <h2>匹配成功！</h2>
-          <p>匹配用户: {selectedMatch.profile.name}</p>
-          <p>简介: {selectedMatch.profile.bio}</p>
+          <p>匹配用户: {selectedMatch.profile.username}</p>
+          <p>简介: {selectedMatch.profile.emial}</p>
           <p>共同游戏:</p>
           <ul>
-            {selectedMatch.commonGames.map((game, index) => (
+            {currentUser.games.filter(game => selectedMatch.games.includes(game)).map((game, index) => (
               <li key={index}>{game}</li>
             ))}
           </ul>
+          <button
+            className="mt-4 p-2 bg-blue-500 text-white rounded"
+            onClick={handleLike}
+          >
+            Like
+          </button>
         </div>
       )}
+      <div>
+      </div>
     </div>
   );
 };

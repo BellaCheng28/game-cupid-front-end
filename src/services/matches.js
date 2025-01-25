@@ -10,9 +10,13 @@ export const viewMatches = async () => {
     }
 }
 
-export const likeProfile = async () => {
+export const likeProfile = async (userid) => {
+    if (!userid) {
+        throw new Error("userid is required");
+    }
     try {
-        const response = await api.put('/matches/like');
+        const response = await api.post(`profile/match/10`, { userid });
+        console.log(userid);
         return response.data;
     } catch (error) {
         console.error("Error liking profile:", error);
