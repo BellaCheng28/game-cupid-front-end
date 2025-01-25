@@ -8,10 +8,11 @@ const Like = () => {
         // Fetch liked profiles from the server
         const fetchLikedProfiles = async () => {
             try {
-                const response = await likeProfile();
+                const userid = '10'; // Replace with actual user id
+                const response = await likeProfile(userid);
                 const data = await response.json();
                 setLikedProfiles(data);
-                console.log('Liked profiles:', JSON.stringify(data, null, 2));
+                console.log('Liked profiles:', data);
             } catch (error) {
                 console.error('Error fetching liked profiles:', error);
             }

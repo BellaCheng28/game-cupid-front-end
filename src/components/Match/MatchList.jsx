@@ -39,7 +39,7 @@ const MatchList = () => {
     },
   ];
   const [currentUser] = useState({
-    name: "You",
+    username: "You",
     games: ["Elden Ring", "Cyberpunk 2077"],
     platforms: ["PC", "Xbox"],
   }); // 当前用户
@@ -60,8 +60,25 @@ const MatchList = () => {
 
   const handleSelectMatch = (userId) => {
     const matchedUser = matchedUsers.find((user) => user.profile.id === userId);
+    console.log("Selected match:", matchedUser);
     if (matchedUser) {
       setSelectedMatch(matchedUser); // 不需要重复筛选
+    }
+  };
+
+  const handleLike = () => {
+    if (selectedMatch) {
+      const updatedProfiles = profiles.map((user) => {
+        if (user.profile.id === selectedMatch.profile.id) {
+          return {
+            ...user,
+            liked: true, // 添加 liked 属性
+          };
+        }
+        return user;
+      });
+      console.log("Like user:", selectedMatch);
+      console.log("Updated profiles:", updatedProfiles);
     }
   };
 
@@ -92,7 +109,7 @@ const MatchList = () => {
                   className="text-blue-600 underline"
                   onClick={() => handleSelectMatch(user.profile.id)}
                 >
-                  {user.profile.name}
+                  {user.profile.username}
                 </button>
               </li>
             ))}
@@ -103,24 +120,23 @@ const MatchList = () => {
       {selectedMatch && (
         <div className="mt-4 border p-4 rounded bg-green-100">
           <h2>匹配成功！</h2>
-          <p>匹配用户: {selectedMatch.profile.name}</p>
-          <p>简介: {selectedMatch.profile.bio}</p>
+          <p>匹配用户: {selectedMatch.profile.username}</p>
+          <p>简介: {selectedMatch.profile.emial}</p>
           <p>共同游戏:</p>
           <ul>
-            {selectedMatch.commonGames.map((game, index) => (
+            {currentUser.games.filter(game => selectedMatch.games.includes(game)).map((game, index) => (
               <li key={index}>{game}</li>
             ))}
           </ul>
+          <button
+            className="mt-4 p-2 bg-blue-500 text-white rounded"
+            onClick={handleLike}
+          >
+            Like
+          </button>
         </div>
       )}
       <div>
-      <Link to ="/like">
-        <button className="mt-4 p-2 bg-blue-500 text-white rounded">
-          Like
-          </button >
-      
-      
-      </Link>
       </div>
     </div>
   );
