@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {signOut} from "../../services/authService";
+import { AuthedUserContext } from "../../App";
 
-function SignOut({ setUser }) {
+function SignOut() {
+  const { setUser } = useContext(AuthedUserContext);
   const navigate = useNavigate();
 
   useEffect(() => {

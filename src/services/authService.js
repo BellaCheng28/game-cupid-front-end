@@ -19,6 +19,10 @@ export const signIn = async (credentials) => {
   try {
     const resp = await api.post("/users/login/", credentials);
     localStorage.setItem("token", resp.data.access);
+       localStorage.setItem("user", JSON.stringify(resp.data.user));
+    console.log("user",resp.data.user);
+   
+  
     return resp.data.user;
   } catch (error) {
     console.error(
@@ -29,9 +33,29 @@ export const signIn = async (credentials) => {
   }
 };
 
+export const deleteUser = async () => {
+  try {
+    const resp = await api.delete("/users/:user_Id/", credentials);
+     localStorage.removeItem("token");
+     localStorage.removeItem("user");
+
+    // const username = localStorage.getItem("user").username;
+
+    return resp.data.user;
+  } catch (error) {
+    console.error(
+      "Sign-in Error: ",
+      error.response ? error.response.data : error
+    );
+    throw error;
+  }
+};
+
+
 export const signOut = async () => {
   try {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     return true;
   } catch (error) {
     throw error;

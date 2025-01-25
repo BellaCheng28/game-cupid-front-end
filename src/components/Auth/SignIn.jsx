@@ -1,16 +1,17 @@
 // SigninForm
 
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn } from "../../services/authService";
-
-const SignIn = ({ setUser }) => {
+import { AuthedUserContext } from "../../App";
+const SignIn = () => {
+  const { setUser } = useContext(AuthedUserContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
-    isError: false,
-    errorMsg: "",
+    // isError: false,
+    // errorMsg: "",
   });
 
   const handleChange = (e) => {
@@ -20,15 +21,15 @@ const SignIn = ({ setUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userData = await signIn(form);
+      const userData = await signIn(formData);
       setUser(userData);
 
-      navigate("/cats");
+      navigate("/");
     } catch (error) {
       console.error(error);
-      setForm((prevForm) => ({
-        isError: true,
-        errorMsg: "Invalid Credentials",
+      setFormData((prevForm) => ({
+        // isError: true,
+        // errorMsg: "Invalid Credentials",
         username: prevForm.username,
         password: "",
       }));
@@ -58,21 +59,20 @@ const SignIn = ({ setUser }) => {
         <form autoComplete="off" onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-sm font-medium text-white"
             >
-              Email:
+              Username:
             </label>
             <input
-              type="email"
+              type="text"
               autoComplete="off"
-              id="email"
+              id="username"
               value={formData.username}
-              placeholder="Enter Email"
-              name="email"
+              placeholder="Enter Username"
+              name="username"
               onChange={handleChange}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none
-              focus:ring-green-700 focus:border-green-700  sm:text-sm"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm "
               required
             />
           </div>
