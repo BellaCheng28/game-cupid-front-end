@@ -18,7 +18,7 @@ export const signIn = async (credentials) => {
   try {
     const resp = await api.post("/users/login/", credentials);
     localStorage.setItem("token", resp.data.access);
-    // localStorage.setItem("user", JSON.stringify(resp.data.user));
+    localStorage.setItem("user", JSON.stringify(resp.data.user));
     // console.log("user",resp.data.user);
 
     return resp.data.user;
