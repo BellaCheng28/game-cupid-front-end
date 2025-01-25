@@ -28,7 +28,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [favoritePlatforms, setFavoritePlatforms] = useState([]);
-  const [favoriteGames, setFavoriteGames] = useState([]);
+  const [profileGames, setprofileGames] = useState([]);
 
   // Fetch authenticated user
   useEffect(() => {
@@ -91,8 +91,8 @@ const App = () => {
         setProfile,
         favoritePlatforms,
         setFavoritePlatforms,
-        favoriteGames,
-        setFavoriteGames,
+        profileGames,
+        setprofileGames,
       }}
     >
       

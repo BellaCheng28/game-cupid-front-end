@@ -44,9 +44,9 @@ export const viewOtherProfile = async (userId) => {
   }
 };
 
-export const searchGames = async () => {
+export const searchGames = async (searchQuery) => {
   try {
-    const response = await api.get("/games/search/");
+    const response = await api.post("/games/search/", { query: searchQuery });
     return response.data;
   } catch (error) {
     console.error("Error fetching games:", error);
@@ -74,12 +74,10 @@ export const getGames = async () => {
   }
 };
 
-
-
-
 export const addProfileGames = async (gameData) => {
     try {
-        const response = await api.put('/profile/games/add/', gameData);
+      console.log(gameData)
+        const response = await api.post('/profile/games/add/', gameData);
         return response.data;
     } catch (error) {
         console.error("Error updating profile games:", error);

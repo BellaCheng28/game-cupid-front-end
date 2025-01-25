@@ -98,14 +98,14 @@ const PlatformList = () => {
     }
   };
 
-  // 更新favoriteGames数组中的顺序
+  // 更新profileGames数组中的顺序
   // const handleSortEnd = (evt) => {
   //   console.log(evt);
   //   // 获取拖动前后的新旧索引
   //   const { oldIndex, newIndex } = evt;
   //   // 如果顺序发生变化
   //   if (oldIndex !== newIndex) {
-  //     const updatedFavoritePlatforms = [...favoritePlatforms]; // 拷贝 favoriteGames 数组
+  //     const updatedFavoritePlatforms = [...favoritePlatforms]; // 拷贝 profileGames 数组
   //     const [movedGame] = updatedFavoritePlatforms.splice(oldIndex, 1); // 
   //     updatedFavoritePlatforms.splice(newIndex, 0, movedGame); // 插入到新位置
   //     setFavoritePlatforms(updatedFavoritePlatforms);

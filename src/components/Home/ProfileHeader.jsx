@@ -12,7 +12,6 @@ const ProfileHeader = () => {
 
   useEffect(() => {
     if (user && user.id) {
-      console.log(user.id)
       const fetchProfile = async () => {
         try {
           const userId = user.id; // 获取 ID

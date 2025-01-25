@@ -6,7 +6,7 @@ import { CiUser } from "react-icons/ci";
 import { CiEdit } from "react-icons/ci";
 
 const MyProfile = () => {
-  const { profile, favoritePlatforms, favoriteGames } =
+  const { profile, favoritePlatforms, profileGames } =
     useContext(AuthedUserContext);
 
   // Render fallback UI if profile or other data is unavailable
@@ -95,8 +95,8 @@ const MyProfile = () => {
           </Link>
         </div>
         <ul>
-          {favoriteGames.length > 0 ? (
-            favoriteGames.map((game) => (
+          {profileGames.length > 0 ? (
+            profileGames.map((game) => (
               <li
                 key={game.id}
                 className="flex justify-between items-center"
