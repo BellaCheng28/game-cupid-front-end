@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { AuthedUserContext } from "../../App";
 import {
   searchGames,
@@ -7,174 +7,245 @@ import {
   addProfileGames,
   editProfileGames,
 } from "../../services/profileService";
+import { FiMenu } from "react-icons/fi";
+import { MdDeleteOutline } from "react-icons/md";
+import { CiSearch } from "react-icons/ci";
+import { IoIosAdd } from "react-icons/io";
+import { ReactSortable } from "react-sortablejs";
 
 const MyGames = () => {
-  const { user } = useContext(AuthedUserContext); // 获取当前用户
-  const [availableGames, setAvailableGames] = useState([]); // 全部可选游戏
-  const [userGames, setUserGames] = useState([]); // 用户的 Top Games
-  const [selectedGame, setSelectedGame] = useState(""); // 当前选中的游戏
+  const { gameId } = useParams();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [allGames, setAllGames] = useState([]); // 存储所有搜索到的游戏
+  const { user, favoriteGames, setFavoriteGames } =
+    useContext(AuthedUserContext);
 
-  // 初始化数据
+  // 触发 fetchTopGame 在搜索查询变化时
   useEffect(() => {
-    fetchAvailableGames(); // 获取所有可选择的游戏
-    fetchUserGames(); // 获取用户已选的 Top Games
-  }, [user.id]);
+    if (user && user.id) {
+      // fetchGame(searchQuery);
+      fetchMyGames("1");
+    }
+  }, [searchQuery]); // 每次查询变化都会触发新的请求
 
-  // 获取所有可选择的游戏
-  const fetchAvailableGames = async () => {
+  // 获取用户的游戏
+  const fetchMyGames = async (query) => {
     try {
-    const data = [
-      { value: "game1", label: "Chess" },
-      { value: "game2", label: "Minecraft" },
-      { value: "game3", label: "League of Legends" },
-      { value: "game4", label: "Fortnite" },
-      { value: "game5", label: "Among Us" },
-    ];
-    setAvailableGames(data);
-
-
-      // const data = await searchGames();
-      // setAvailableGames(data);
+      const data = await getGames(query); // 获取用户的游戏
+      setFavoriteGames(data); // 设置用户的游戏
     } catch (error) {
-      console.error("Error fetching available games:", error);
+      console.error("Failed to fetch favorite games:", error);
     }
   };
 
-  // 获取用户的 Top Games
-  const fetchUserGames = async () => {
+  // 获取搜索结果
+  const fetchGame = async (query) => {
     try {
-      const data = [
-        { value: "game1", label: "Chess" },
-        { value: "game3", label: "League of Legends" },
-      ];
-
-      // const data = await getGames();
-      // setUserGames(data);
+      const data = await searchGames(query); // 获取搜索数据
+      setAllGames(data); // 设置所有搜索到的游戏
     } catch (error) {
-      console.error("Error fetching user's games:", error);
+      console.error("Failed to fetch AllGames:", error);
     }
   };
 
-  // 添加游戏到 Top Games
-  const handleAddGame = async () => {
-    if (!selectedGame) return;
+  // 搜索框输入变化
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value); // 更新查询值
+  };
 
-    // 检查是否已存在
-    if (userGames.some((game) => game.value === selectedGame)) {
-      alert("This game is already in your Top Games list.");
-      return;
-    }
+  // 统一的函数：处理游戏添加
+  const handleAddGame = async (game) => {
+    // 如果游戏已经存在于收藏中，就不再重复添加
+    if (favoriteGames.some((g) => g.id === game.id)) return;
 
-    const newGame = availableGames.find((game) => game.value === selectedGame);
-    setUserGames((prev) => [...prev, newGame]); // 乐观更新
+  const dynamicFavRank =
+      favoriteGames.length > 0
+        ? Math.max(...favoriteGames.map((g) => g.fav_rank)) + 1
+        : 1; // 如果没有收藏，设置为 1
 
+    const gameData = {
+      title: game.title, // 游戏名称
+      genre: game.genre, // 游戏类别
+      fav_rank: dynamicFavRank, // 假设你设置一个默认的 fav_rank 或者你可以动态地计算
+    };
+  console.log("gameData:", gameData);
+    // 添加到 favoriteGames 中
+    setFavoriteGames((prevFavorites) => [...prevFavorites, game]);
+  
     try {
-      await addProfileGames(newGame); // 后端同步
-      setSelectedGame("");
+      // 直接将游戏添加到后端
+      await addProfileGames( gameData);
+      console.log("Game added to profile:", game);
     } catch (error) {
-      console.error("Error adding game:", error);
-      setUserGames((prev) =>
-        prev.filter((game) => game.value !== selectedGame)
-      ); // 回滚
+      console.error("Error adding game to favorites:", error);
     }
   };
 
-  // 更新游戏顺序
-  const handleDragEnd = async (result) => {
-    if (!result.destination) return; // 如果没有目标位置，直接返回
+ const handleSortEnd = async (evt) => {
+   const { oldIndex, newIndex } = evt;
 
-    const reorderedGames = Array.from(userGames);
-    const [movedGame] = reorderedGames.splice(result.source.index, 1); // 移除拖拽的游戏
-    reorderedGames.splice(result.destination.index, 0, movedGame); // 插入到新位置
+   // 如果位置没有发生变化，直接返回
+   if (oldIndex === newIndex) return;
 
-    setUserGames(reorderedGames); // 更新前端状态
+   // 更新本地游戏顺序
+   const updatedFavoriteGames = [...favoriteGames];
+   const [movedGame] = updatedFavoriteGames.splice(oldIndex, 1);
+   updatedFavoriteGames.splice(newIndex, 0, movedGame);
 
-    try {
-      await editProfileGames({ userId: user.id, games: reorderedGames }); // 发送新顺序到后端
-    } catch (error) {
-      console.error("Error updating game order:", error);
-      fetchUserGames(); // 如果失败，重新加载用户游戏
-    }
-  };
+   // 更新本地的游戏顺序
+   setFavoriteGames(updatedFavoriteGames);
+
+   // 更新每个游戏的 fav_rank
+   const gameUpdates = updatedFavoriteGames.map((game, index) => ({
+     gameId: game.id,
+     title: game.title,
+     fav_rank: index + 1, // 排序后重新分配 fav_rank
+     genre: game.genre, // 保留 genre 数据
+   }));
+     
+console.log("gameUpdates:", gameUpdates);
+   try {
+     // 向后端发送更新请求
+     for (const gameData of gameUpdates) {
+       const gameUpdateData = {
+         gameId: gameData.gameId,
+         title: gameData.title,
+         fav_rank: gameData.fav_rank,
+         genre: gameData.genre,
+       };
+     console.log("gameUpdateData:", gameUpdateData);
+     console.log("gameId:", gameId);
+       // 发送 PUT 请求，更新对应的游戏
+      await editProfileGames(user.id, gameData.gameId, gameData);
+     }
+
+     console.log("Game order updated successfully");
+   } catch (error) {
+     console.error("Error updating game order:", error);
+   }
+ };
+
+
+
+const removeFromFavorite = async (gameId, game) => {
+  if (!game) {
+    console.error("No game object passed!");
+    return;
+  }
+  // 过滤掉要删除的游戏，更新本地状态
+  const updatedFavorites = favoriteGames.filter((game) => game.id !== gameId);
+  setFavoriteGames(updatedFavorites);
+ console.log("gameId:", gameId);
+ console.log("game:", game);
+  try {
+
+  const gameData = {
+  title: game.title,
+  fav_rank: game.fav_rank,
+};
+
+
+
+    // 向后端发送删除请求
+    await editProfileGames(user.id,gameId, gameData);
+    console.log("Game removed from profile:", gameId); // 可以根据需要在这里添加日志
+  } catch (error) {
+    console.error("Error removing game from favorites:", error);
+  }
+};
+
+
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-b from-blue-900 to-blue-700">
-      <div className="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center text-blue-800">
-          Manage Your Top Games
-        </h1>
-
-        {/* 可选择游戏 */}
-        <div className="mt-4">
-          <label htmlFor="game-select" className="block text-gray-700 mb-2">
-            Select a game
-          </label>
-          <select
-            id="game-select"
-            value={selectedGame}
-            onChange={(e) => setSelectedGame(e.target.value)}
-            className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 bg-fixed">
+      <div className="container w-full mx-auto flex flex-col justify-start max-w-[800px] max-h-[800px] flex-wrap">
+        {/* Search games */}
+        <div className="flex items-center space-y-2">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search for a game"
+            className="border p-2 rounded-md"
+          />
+          <button
+            onClick={() => fetchGame(searchQuery)}
+            className="ml-2 text-white"
           >
-            <option value="">-- Select a Game --</option>
-            {availableGames.map((game) => (
-              <option key={game.value} value={game.value}>
-                {game.label}
-              </option>
-            ))}
-          </select>
+            <CiSearch size={24} />
+          </button>
+          <div>
+            <Link to="/">
+              <button className="bg-blue-500 text-white p-2 rounded m-3">
+                Go back home
+              </button>
+            </Link>
+          </div>
         </div>
 
-        {/* 用户的 Top Games 列表 */}
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold text-gray-700">
-            Your Top Games (Drag to reorder):
-          </h2>
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="games-list">
-              {(provided) => (
-                <ul
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className="mt-4 space-y-2"
-                >
-                  {userGames.map((game, index) => (
-                    <Draggable
-                      key={game.value}
-                      draggableId={game.value}
-                      index={index}
+        {/* Display search results */}
+        <div className="text-white">
+          {allGames.length > 0 && (
+            <div
+              className="max-h-[300px] overflow-y-auto custom-scrollbar"
+              style={{ maxHeight: "300px" }} // 可以根据实际需要调整 maxHeight
+            >
+              <ul>
+                {allGames.map((game, index) => (
+                  <li
+                    key={index} // 使用 game.title 作为唯一标识符
+                    className="flex items-center justify-between p-2 m-2 bg-white text-violet-500 rounded"
+                  >
+                    <span className="flex-1 text-left">{game.title}</span>
+                    <span className="flex-1 text-left">{game.fav_rank}</span>
+                    <span className="flex-1 text-left">
+                      {Array.isArray(game.genre)
+                        ? game.genre.join(", ")
+                        : game.genre}
+                    </span>
+                    <button
+                      onClick={() => handleAddGame(game)} // 选择游戏并添加到收藏
+                      className="ml-2 p-1 bg-green-500 text-white rounded"
                     >
-                      {(provided) => (
-                        <li
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="flex justify-between items-center p-2 bg-blue-100 rounded-md"
-                        >
-                          <span className="text-gray-700">{game.label}</span>
-                          <button
-                            onClick={() => handleDeleteGame(game.value)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            Delete
-                          </button>
-                        </li>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-          </DragDropContext>
+                      Select
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
-        {/* 添加游戏按钮 */}
-        <button
-          onClick={handleAddGame}
-          className="mt-6 w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-        >
-          Add to Top Games
-        </button>
+        {/* Display favorite games */}
+        <div className="text-white">
+          <h2 className="mt-1">Top Games</h2>
+          <ReactSortable
+            list={favoriteGames}
+            setList={setFavoriteGames}
+            onEnd={handleSortEnd}
+            tag="ul"
+            className="space-y-2"
+          >
+            {favoriteGames.map((game) => (
+              <li
+                key={game.id}
+                className="flex justify-between items-center p-2 bg-blue-500 rounded"
+              >
+                <span className="flex-1 text-left">{game.title}</span>
+                <span className="flex-1 text-left">{game.fav_rank}</span>
+                <span className="flex-1 text-left">{game.genres}</span>
+                <div className="flex items-center space-x-2">
+                  <button className="p-1 text-white rounded">
+                    <FiMenu size={24} />
+                  </button>
+                  <button onClick={() => removeFromFavorite(game.id, game)}>
+                    <MdDeleteOutline size={24} />
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ReactSortable>
+        </div>
       </div>
     </div>
   );

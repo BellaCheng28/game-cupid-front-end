@@ -74,8 +74,7 @@ const Platform = () => {
       brand: platform.brand,
       tag: tags[platform.brand] || "",
     };
-    console.log("platformId", platformId);
-    console.log("Saving platform:", platformWithTag);
+  
     try {
       const response = await addProfilePlatform(user.id,platformWithTag); // 单个请求发送数据到后端
       console.log("Platform saved:", response);

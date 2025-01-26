@@ -1,13 +1,12 @@
 import { useState,createContext, useEffect } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
-import { verifyUser } from "./services/authService";
+import { verifyUser, deleteUser } from "./services/authService";
 import NavBar from "./Components/NavBar/NavBar";
 import SignUp from "./Components/Auth/SignUp";
 import SignIn from "./Components/Auth/SignIn";
 import SignOut from "./Components/Auth/SignOut";
-import TopGmaes from "./Components/Home/TopGames";
-// import MyGames from "./Components/Home/MyGames";
-import PlatformList from "./Components/Home/PlatformList";
+import MyGames from "./Components/Home/MyGames";
+
 import Platform from "./Components/Home/Platform";
 import ProfileHeader from "./Components/Home/ProfileHeader";
 import MyProfile from "./Components/Home/myProfile";
@@ -15,7 +14,11 @@ import { useLocation } from "react-router-dom";
 import { BsPass } from "react-icons/bs";
 import  ViewOtherProfile from "./Components/Match/ViewOtherProfile";
 import MatchList from "./Components/Match/MatchList"
-import { ProfileById } from "./services/profileService";
+import {
+  ProfileById,
+  profilePlatforms,
+  getGames,
+} from "./services/profileService";
 import { signOut } from "./services/authService";
 import About from "./Components/About/About";
 
@@ -40,21 +43,28 @@ const App = () => {
     fetchUser();
 
   }, []);
-  console.log("user", user);
+ 
 
   // 根据用户 ID 获取资料
   useEffect(() => {
     if (user && user.id) {
-      const fetchProfile = async () => {
+      const fetchData = async () => {
         try {
+          setLoading(true); // 数据加载时设置为 true
           const profileData = await ProfileById(user.id);
-          console.log("Fetched profile data:", profileData);
+          const platformData = await profilePlatforms(user.id);
+          const gameData = await getGames(user.id);
           setProfile(profileData || null);
+          setUserPlatforms(platformData);
+          setFavoriteGames(gameData);
+          setLoading(false); // 数据加载完成时设置为 false
         } catch (err) {
           console.error("Failed to fetch profile:", err);
+          setLoading(false); // 错误时也设置为 false
+          setError("Failed to load data");
         }
       };
-      fetchProfile();
+      fetchData();
     }
   }, [user]);
 
@@ -73,6 +83,10 @@ const handleSignout = () => {
    setUser(null);
 }
 
+const handleDeleteUser = async () => {
+   deleteUser();
+    setUser(null);
+}
   return (
     <AuthedUserContext.Provider
       value={{
@@ -86,13 +100,16 @@ const handleSignout = () => {
         setFavoriteGames,
       }}
     >
-      <NavBar handleSignout={handleSignout} />
+      <NavBar
+        handleSignout={handleSignout}
+        handleDeleteUser={handleDeleteUser}
+      />
       <div className="pt-16">
         <Routes>
           {user ? (
             <>
-              <Route path="/top-game" element={<TopGmaes />} />
-              <Route path="/platform" element={<PlatformList />} />
+              <Route path="/mygames" element={<MyGames />} />
+              <Route path="/platform" element={<Platform />} />
               <Route path="/profile/edit" element={<ProfileHeader />} />
               <Route path="/" element={<MyProfile />} />
               <Route path="/matches" element={<MatchList />} />
@@ -103,12 +120,10 @@ const handleSignout = () => {
                 path="/match/otherprofileId"
                 element={<ViewOtherProfile />}
               />
-              {/* <Route path="*" element={<Navigate to="/" />} /> */}
             </>
           ) : (
             <>
-              <Route path="/" element={<SignIn />} />
-              {/* <Route path="*" element={<Navigate to="/" />} /> */}
+              <Route path="*" element={<SignIn />} />
             </>
           )}
           <Route path="/sign-up" element={<SignUp />} />

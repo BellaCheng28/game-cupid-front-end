@@ -44,9 +44,9 @@ export const viewOtherProfile = async (userId) => {
   }
 };
 
-export const searchGames = async () => {
+export const searchGames = async (query) => {
   try {
-    const response = await api.get("/games/search/");
+    const response = await api.post("/games/search/", { query });
     return response.data;
   } catch (error) {
     console.error("Error fetching games:", error);
@@ -55,21 +55,21 @@ export const searchGames = async () => {
 };
 
 
-export const getGames = async () => {
-    try {
-        const response = await api.get('/profile/games/');
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching profile games:", error);
-        throw error;
-    }
-}
+export const getGames = async (query) => {
+  try {
+    const response = await api.get("/profile/games/", { query });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching profile games:", error);
+    throw error;
+  }
+};
 
 
 
 export const addProfileGames = async (gameData) => {
     try {
-        const response = await api.put('/profile/games/add/', gameData);
+        const response = await api.post('/profile/games/add/', gameData);
         return response.data;
     } catch (error) {
         console.error("Error updating profile games:", error);
@@ -77,9 +77,9 @@ export const addProfileGames = async (gameData) => {
     }
 }
 
-export const editProfileGames = async (gameData) => {
+export const editProfileGames = async (userId, gameId,gameData) => {
   try {
-    const response = await api.put(`/profile/games/${userId}/edit/`, gameData);
+    const response = await api.put(`/profile/games/${gameId}/edit/`, gameData);
     return response.data;
   } catch (error) {
     console.error("Error updating profile games:", error);
