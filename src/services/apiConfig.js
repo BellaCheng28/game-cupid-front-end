@@ -10,7 +10,6 @@ const getToken = () => {
 const api = axios.create({
   baseURL: "https://gamecupid-fc48081a5cff.herokuapp.com/",
 });
-console.log(api.defaults.baseURL);
 api.interceptors.request.use(
   async function (config) {
     const token = await getToken();
