@@ -1,50 +1,38 @@
-import { useState,createContext,useContext, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { verifyUser } from "./services/authService";
-import NavBar from "./Components/NavBar/NavBar";
+import { useState,createContext, useEffect } from "react";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { verifyUser, deleteUser } from "./services/authService";
+import NavBar from "./components/NavBar/NavBar";
 import SignUp from "./Components/Auth/SignUp";
 import SignIn from "./Components/Auth/SignIn";
 import SignOut from "./Components/Auth/SignOut";
-import TopGmaes from "./Components/Home/TopGames";
-import PlatformList from "./Components/Home/PlatformList";
+import MyGames from "./Components/Home/MyGames";
+import Landing from "./components/Landing/Landing";
+import Platform from "./Components/Home/Platform";
 import ProfileHeader from "./Components/Home/ProfileHeader";
-import MyProfile from "./Components/Home/MyProfile";
+import MyProfile from "./Components/Home/myProfile";
 import { useLocation } from "react-router-dom";
 import { BsPass } from "react-icons/bs";
 import  ViewOtherProfile from "./Components/Match/ViewOtherProfile";
 import MatchList from "./Components/Match/MatchList"
-import { ProfileById } from "./services/profileService";
-import Like from "./components/Match/Like";
+import {
+  ProfileById,
+  profilePlatforms,
+  getGames,
+} from "./services/profileService";
+import { signOut } from "./services/authService";
+
 
 
 export const AuthedUserContext = createContext(null);
 
 const App = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
-  useEffect(() => {
-       const fetchProfile = async () => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      const user = JSON.parse(storedUser); // 解析为对象
-      const userId = user?.id;
-        // console.log("User ID:", userId);
-      if (!userId) {
-        console.error("No userId found in parsed user data");
-        return;
-      }
-      const profileData = await ProfileById(userId);
-      console.log("profileData:", profileData);
-      profileData ? setProfile(profileData) : setProfile(null);
-      console.log("Profile data:", profileData);
-    } catch (error) {
-      console.error("Failed to fetch profileById:", error);
-    }
-  };
-  
-  fetchProfile();
-}, []);
-console.log("profile",profile);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [userPlatforms, setUserPlatforms] = useState([]);
+  const[favoriteGames, setFavoriteGames] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -53,7 +41,32 @@ console.log("profile",profile);
     };
 
     fetchUser();
+
   }, []);
+ 
+
+  // 根据用户 ID 获取资料
+  useEffect(() => {
+    if (user && user.id) {
+      const fetchData = async () => {
+        try {
+          setLoading(true); // 数据加载时设置为 true
+          const profileData = await ProfileById(user.id);
+          const platformData = await profilePlatforms(user.id);
+          const gameData = await getGames(user.id);
+          setProfile(profileData || null);
+          setUserPlatforms(platformData);
+          setFavoriteGames(gameData);
+          setLoading(false); // 数据加载完成时设置为 false
+        } catch (err) {
+          console.error("Failed to fetch profile:", err);
+          setLoading(false); // 错误时也设置为 false
+          setError("Failed to load data");
+        }
+      };
+      fetchData();
+    }
+  }, [user]);
 
   const location = useLocation();
   useEffect(() => {
@@ -62,7 +75,18 @@ console.log("profile",profile);
     }
   }, [location]);
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  
+const handleSignout = () => {
+   signOut();
+   setUser(null);
+}
 
+const handleDeleteUser = async () => {
+   deleteUser();
+    setUser(null);
+}
   return (
     <AuthedUserContext.Provider
       value={{
@@ -70,27 +94,42 @@ console.log("profile",profile);
         setUser,
         profile,
         setProfile,
-        // favoritePlatforms,
-        // setFavoritePlatforms,
-        // favoriteGames,
-        // setFavoriteGames,
+        userPlatforms,
+        setUserPlatforms,
+        favoriteGames,
+        setFavoriteGames,
       }}
     >
-      <NavBar />
+      <NavBar
+        handleSignout={handleSignout}
+        handleDeleteUser={handleDeleteUser}
+      />
       <div className="pt-16">
         <Routes>
+          {user ? (
+            <>
+              <Route path="/" element={<Landing />} />
+              <Route path="/mygames" element={<MyGames />} />
+              <Route path="/platform" element={<Platform />} />
+              <Route path="/profile/edit" element={<ProfileHeader />} />
+              <Route path="/myprofile" element={<MyProfile />} />
+              <Route path="/matches" element={<MatchList />} />
+              <Route path="/brand" element={<Platform />} />
+              {/* <Route path="/mygames" element={<MyGames />} /> */}
+
+              <Route
+                path="/match/otherprofileId"
+                element={<ViewOtherProfile />}
+              />
+            </>
+          ) : (
+            <>
+              <Route path="*" element={<SignIn />} />
+            </>
+          )}
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-out" element={<SignOut />} />
-          <Route path="/top-game" element={<TopGmaes />} />
-          <Route path="/platform" element={<PlatformList />} />
-          <Route path="/profile/edit" element={<ProfileHeader />} />
-          <Route path="/" element={<MyProfile />} />
-          <Route path="/matches" element={<MatchList />} />
-          <Route path="/matches/otherprofileId" element={<ViewOtherProfile />} />
-          <Route path="/matches/like" element={<Like />} /> 
         </Routes>
-       
       </div>
     </AuthedUserContext.Provider>
   );
