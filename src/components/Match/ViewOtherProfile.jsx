@@ -4,35 +4,35 @@ import { CiLocationOn } from "react-icons/ci";
 import { AuthedUserContext } from "../../App";
 import { useParams } from "react-router-dom";
 import {viewOtherProfile} from "../../services/profileService.js";
-const ViewProfile = () => {
-//   const { user } = useContext(AuthedUserContext);
-//   const { userId } = useParams();
-//   const [otherProfile, setOtherProfile] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//  useEffect(() => {
-//    if (userId) {
-//      const fetchOtherProfile = async () => {
-//        try {
-//          const otherProfiledata = await viewOtherProfile(userId);
-//          setOtherProfile(otherProfiledata);
-//        } catch (error) {
-//          console.error("Failed to fetch other profile:", error);
-//        } finally {
-//          setLoading(false); // 加载完成
-//        }
-//      };
+const ViewOtherProfile = () => {
+  //   const { user } = useContext(AuthedUserContext);
+  //   const { userId } = useParams();
+  //   const [otherProfile, setOtherProfile] = useState(null);
+  //   const [loading, setLoading] = useState(true);
+  //  useEffect(() => {
+  //    if (userId) {
+  //      const fetchOtherProfile = async () => {
+  //        try {
+  //          const otherProfiledata = await viewOtherProfile(userId);
+  //          setOtherProfile(otherProfiledata);
+  //        } catch (error) {
+  //          console.error("Failed to fetch other profile:", error);
+  //        } finally {
+  //          setLoading(false); // 加载完成
+  //        }
+  //      };
 
-//       fetchOtherProfile(); // 调用获取数据的函数
-//     }
-//   }, [userId]); // 当 userId 改变时重新加载数据
-//   if (loading) {
-//     return <div>Loading...</div>;
-//   }
+  //       fetchOtherProfile(); // 调用获取数据的函数
+  //     }
+  //   }, [userId]); // 当 userId 改变时重新加载数据
+  //   if (loading) {
+  //     return <div>Loading...</div>;
+  //   }
 
-//   // 如果没有获取到数据，或者 userId 不存在，显示错误信息
-//   if (!otherProfile) {
-//     return <div>User not found</div>;
-//   }
+  //   // 如果没有获取到数据，或者 userId 不存在，显示错误信息
+  //   if (!otherProfile) {
+  //     return <div>User not found</div>;
+  //   }
 
   return (
     <>
@@ -61,7 +61,7 @@ const ViewProfile = () => {
           <h2 className="p-2">Platforms</h2>
 
           <ul>
-            {otherProfile.platforms.map((platform) => (
+            {ViewOtherProfile.platforms.map((platform) => (
               <li
                 key={platform.id}
                 className="flex justify-between items-center  "
@@ -111,4 +111,4 @@ const ViewProfile = () => {
 };
 
 
-export default ViewProfile;
+export default ViewOtherProfile;

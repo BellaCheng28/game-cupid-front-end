@@ -6,7 +6,7 @@ import SignUp from "./Components/Auth/SignUp";
 import SignIn from "./Components/Auth/SignIn";
 import SignOut from "./Components/Auth/SignOut";
 import MyGames from "./Components/Home/MyGames";
-
+import Landing from "./components/Landing/Landing";
 import Platform from "./Components/Home/Platform";
 import ProfileHeader from "./Components/Home/ProfileHeader";
 import MyProfile from "./Components/Home/myProfile";
@@ -20,7 +20,7 @@ import {
   getGames,
 } from "./services/profileService";
 import { signOut } from "./services/authService";
-import About from "./Components/About/About";
+
 
 
 export const AuthedUserContext = createContext(null);
@@ -108,10 +108,11 @@ const handleDeleteUser = async () => {
         <Routes>
           {user ? (
             <>
+              <Route path="/" element={<Landing />} />
               <Route path="/mygames" element={<MyGames />} />
               <Route path="/platform" element={<Platform />} />
               <Route path="/profile/edit" element={<ProfileHeader />} />
-              <Route path="/" element={<MyProfile />} />
+              <Route path="/myprofile" element={<MyProfile />} />
               <Route path="/matches" element={<MatchList />} />
               <Route path="/brand" element={<Platform />} />
               {/* <Route path="/mygames" element={<MyGames />} /> */}

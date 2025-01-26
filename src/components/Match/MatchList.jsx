@@ -1,78 +1,118 @@
-import React, { useState } from "react";
-import { CiSearch } from "react-icons/ci";
-const MatchList = () => {
-  const [profiles, setProfiles] = useState([]); // 所有用户的资料
- 
-  const [matchedUsers, setMatchedUsers] = useState([]); // 匹配的用户列表
-  const [selectedMatch, setSelectedMatch] = useState(null); // 选中的用户
-  // 找出所有匹配用户
-    const findMatches = () => {
-      const matches = profiles.filter((user) => {
-        // 检查是否有共同游戏
-        const commonGames = currentUser.games.filter((game) =>
-          user.games.includes(game)
-        );
-        return commonGames.length > 0; // 如果有共同游戏，则匹配成功
-      });
-      setMatchedUsers(matches);
-      setSelectedMatch(null); // 重置选中的用户
-    }; 
+import React, { useState, useEffect } from 'react';
+import { MatchUser, addMatchUser } from "../../services/matcheService";
+import { FaRegUser } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { RiHeartAdd2Line } from "react-icons/ri";
 
-  const handleSelectMatch = (userId) => {
-    const matchedUser = matchedUsers.find((user) => user.profile.id === userId);
-    if (matchedUser) {
-      setSelectedMatch(matchedUser); // 不需要重复筛选
-    }
+import { MdOutlineDelete } from "react-icons/md";
+
+const MatchList = () => {
+  const [matches, setMatches] = useState([]);
+  const [matchProfileGame, setMatchProfileGame] = useState('');
+  const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        const response = await MatchUser();
+        console.log(response);
+        setMatches(response);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMatches();
+  }, []);
+  console.log("matches",matches);
+
+ 
+  const chooseMatchProfile = (e) => {
+    setMatchProfileGame(e.target.value);
   };
 
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await addMatchUser({
+        
+      });
+      setSuccess('Match successfully added!');
+      setMatchProfileGame("");
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+ const handleLikeClick = (match) => {
+   // Check if the game matches before adding the match
+   if (match.game === matchProfileGame) {
+     setSuccess(`Match with ${match.username} was successful!`);
+     // You can implement additional logic for updating state or backend here
+   } else {
+     setError("No match found for the selected game.");
+   }
+ };
+
+  const handleDelete = (matchId) => {
+    // Handle delete logic (update state to remove the match from the list)
+    setMatches(matches.filter((match) => match.id !== matchId));
+  };
+
+
+
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
-    <div className="p-4">
-      <h1> username: {currentUser.username}</h1>
-      <ul>
-        {currentUser.games.map((game, index) => (
-          <li key={index}>{game}</li>
+    <div className="py-8 bg-gradient-to-b from-violet-950 to-violet-800  min-h-screen">
+      <h1 className="text-3xl font-bold text-center text-white mb-8">
+        Profile Matches
+      </h1>
+      <ul className="flex flex-wrap justify-center gap-8">
+        {matches.map((match) => (
+          <li
+            key={match.id}
+            className="w-full md:w-1/3 lg:w-1/4 xl:w-1/5 flex justify-center"
+          >
+            <div className="w-full max-w-[320px] bg-lightPurple rounded-lg shadow-lg flex flex-col items-center p-6 text-white">
+              {/* user */}
+              <FaRegUser size={60} className="text-purple-200" />
+              <h2 className="mt-4 text-xl font-semibold">{match.username}</h2>
+
+              {/* like and delete */}
+              <div className="flex justify-between items-center w-3/4 mt-6">
+                <Link
+                  to="/like"
+                  className="text-red-500 hover:text-red-600 transition duration-200"
+                  title="Like"
+                >
+                  <RiHeartAdd2Line size={30} />
+                </Link>
+                <Link
+                  to="/otherProfile"
+                  className="text-green-500 hover:text-green-700 transition duration-200"
+                >
+                  ViewProfile
+                </Link>
+                <button
+                  className="text-gray-300 hover:text-red-500 transition duration-200"
+                  title="Delete"
+                >
+                  <MdOutlineDelete size={30} />
+                </button>
+              </div>
+            </div>
+          </li>
         ))}
       </ul>
-      {/* 查找匹配按钮 */}
-      <button
-        className="mt-4 p-2 bg-blue-500 text-white rounded"
-        onClick={findMatches}
-      >
-        <CiSearch />
-      </button>
-      {/* 显示匹配的用户列表 */}
-      {matchedUsers.length > 0 && (
-        <div className="mt-4">
-          <h2>匹配的用户:</h2>
-          <ul>
-            {matchedUsers.map((user) => (
-              <li key={user.profile.id}>
-                <button
-                  className="text-blue-600 underline"
-                  onClick={() => handleSelectMatch(user.profile.id)}
-                >
-                  {user.profile.name}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {/* 显示选中的匹配用户详情 */}
-      {selectedMatch && (
-        <div className="mt-4 border p-4 rounded bg-green-100">
-          <h2>匹配成功！</h2>
-          <p>匹配用户: {selectedMatch.profile.name}</p>
-          <p>简介: {selectedMatch.profile.bio}</p>
-          <p>共同游戏:</p>
-          <ul>
-            {selectedMatch.commonGames.map((game, index) => (
-              <li key={index}>{game}</li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 };
+
 export default MatchList;

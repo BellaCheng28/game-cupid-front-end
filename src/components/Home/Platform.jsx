@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthedUserContext } from "../../App";
-import { useParams } from "react-router-dom";
+import { useParams,Link } from "react-router-dom";
 import {
   Platforms,
   profilePlatforms,
@@ -14,7 +14,6 @@ const Platform = () => {
     useContext(AuthedUserContext); // 获取当前用户
   const { platformId } = useParams();
   const [availablePlatforms, setAvailablePlatforms] = useState([]); // 可选择的平台
-  // const [userPlatforms, setUserPlatforms] = useState([]); // 用户已选择的平台
   const [tags, setTags] = useState({}); // 用对象来保存平台和标签的对应关系
 
   // 加载可选择的平台和用户已选的平台
@@ -40,10 +39,19 @@ const Platform = () => {
     try {
       const data = await profilePlatforms(user.id); // 从后端获取用户已选平台
       setUserPlatforms(data); // 更新用户平台列表
+      // 更新tags对象，保证每个平台都有对应的标签
+      const initialTags = data.reduce((acc, platform) => {
+        acc[platform.brand] = platform.tag || ""; // 如果没有标签，初始化为空字符串
+        return acc;
+      }, {});
+      setTags(initialTags); // 更新tags状态
     } catch (error) {
       console.error("Failed to fetch user's platforms:", error);
     }
   };
+
+  
+
 
   // 处理平台选择事件
   const handleSelectChange = (e) => {
@@ -115,13 +123,17 @@ const Platform = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800">
-      <div className="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center text-violet-800">
+    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800  ">
+      <div className="container mx-auto max-w-lg p-6 bg-lightPurple rounded-lg shadow-md">
+        <Link to="/myprofile" className="text-white font-bold">
+          Back
+        </Link>
+        <h1 className="text-2xl font-bold text-center text-white">
           Manage My Platforms
         </h1>
+
         <div className="mt-4">
-          <label htmlFor="platform-select" className="block text-gray-700 mb-2">
+          <label htmlFor="platform-select" className="block text-white mb-2">
             Select a platform
           </label>
           <select
@@ -140,7 +152,7 @@ const Platform = () => {
         </div>
 
         <div className="mt-6">
-          <h2 className="text-lg font-semibold text-gray-700">
+          <h2 className="text-lg font-semibold text-white">
             Your selected platforms:
           </h2>
           <ul>
@@ -150,26 +162,30 @@ const Platform = () => {
                 className="w-full p-2  focus:outline-none focus:ring-2 focus:ring-violet-500"
               >
                 <div>
-                  <p className="text-gray-700">{platform.brand}</p>
-                  <input
-                    type="text"
-                    value={tags[platform.brand] || ""}
-                    onChange={(e) => handleTagChange(e, platform.brand)}
-                    className="p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-500"
-                    placeholder="Enter tag"
-                  />
-                  <button
-                    onClick={() => handleSavePlatform(platform)}
-                    className="text-green-500 hover:text-green-700 mx-2"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={() => handleDeletePlatform(platform.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <MdDeleteOutline size={20} />
-                  </button>
+                  <p className="text-white">{platform.brand}</p>
+                  <div className=" flex justify-between items-center">
+                    <input
+                      type="text"
+                      id="tag"
+                      value={tags[platform.brand] || ""}
+                      onChange={(e) => handleTagChange(e, platform.brand)}
+                      className="p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                      placeholder="Enter tag"
+                    />
+
+                    <button
+                      onClick={() => handleSavePlatform(platform)}
+                      className="text-green-500 hover:text-green-700 mx-2"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => handleDeletePlatform(platform.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <MdDeleteOutline size={20} />
+                    </button>
+                  </div>
                 </div>
               </li>
             ))}

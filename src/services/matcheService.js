@@ -1,24 +1,39 @@
 import api from "./apiConfig.js";
 
-export const viewMatches = async () => {
-    try {
-        const response = await api.get('/matches/view');
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching matches:", error);
-        throw error;
-    }
-}
+export const MatchUser = async (query) => {
+  try {
+    const response = await api.get("profile/match/search/");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching matches:", error);
+    throw error;
+  }
+};
 
-export const likeProfile = async () => {
+
+
+export const addMatchUser = async () => {
     try {
-        const response = await api.put('/matches/like');
+        const response = await api.post("profile/match/add/");
         return response.data;
     } catch (error) {
         console.error("Error liking profile:", error);
         throw error;
     }
 }
+
+export const showMatchUser = async () => {
+  try {
+    const response = await api.post("profile/match/userId/");
+    return response.data;
+  } catch (error) {
+    console.error("Error liking profile:", error);
+    throw error;
+  }
+};
+
+
+
 
 export  const blockProfile = async () => {
     try {

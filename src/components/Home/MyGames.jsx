@@ -175,9 +175,9 @@ const removeFromFavorite = async (gameId, game) => {
             <CiSearch size={24} />
           </button>
           <div>
-            <Link to="/">
+            <Link to="/myprofile">
               <button className="bg-blue-500 text-white p-2 rounded m-3">
-                Go back home
+                Go to Profile
               </button>
             </Link>
           </div>
