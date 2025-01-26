@@ -1,7 +1,7 @@
 import { useState,createContext, useEffect } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { verifyUser, deleteUser } from "./services/authService";
-import NavBar from "./Components/NavBar/NavBar";
+import NavBar from "./components/NavBar/NavBar";
 import SignUp from "./Components/Auth/SignUp";
 import SignIn from "./Components/Auth/SignIn";
 import SignOut from "./Components/Auth/SignOut";
