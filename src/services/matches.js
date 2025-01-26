@@ -9,14 +9,28 @@ export const viewMatches = async () => {
         throw error;
     }
 }
-
-export const likeProfile = async (userid) => {
-    if (!userid) {
-        throw new Error("userid is required");
+export const likeProfile = async (payload) => {
+    const { profile_id, match_profile_id, date_matched } = payload;
+    if (!profile_id || !match_profile_id || !date_matched) {
+        throw new Error("profile_id, match_profile_id, and date_matched are required");
     }
     try {
-        const response = await api.post(`profile/match/10`, { userid });
-        console.log(userid);
+        // Retrieve the token (e.g., from localStorage or another state management solution)
+        const token = await localStorage.getItem('token');
+        if (!token) {
+            throw new Error("Token not found. Please log in again.");
+        }
+
+        // Configure the Authorization header with the Bearer token
+        const response = await api.post('/profile/match/add/', {
+            profile_id,
+            match_profile_id,
+            date_matched
+        }, {
+            headers: {
+            Authorization: `Bearer ${token}`
+            },
+        });
         return response.data;
     } catch (error) {
         console.error("Error liking profile:", error);
@@ -68,6 +82,24 @@ export const getBlocks = async () => {
         const response = await api.get('/matches/blocks/get')
     } catch (error) {
         console.error("Error fetching blocks:", error);
+        throw error;
+    }
+}
+
+export const matchProfile = async () => {
+    try {
+         // Retrieve the token (e.g., from localStorage or another state management solution)
+      const token = localStorage.getItem('token'); // Or wherever you store the token
+
+      // Configure the Authorization header with the Bearer token
+      const response = await api.get('/profile/match/search/', {
+          headers: {
+              Authorization: `Bearer ${token}`, // Pass the token here
+          },
+      });
+        return response.data;
+    } catch (error) {
+        console.error("Error matching profile:", error);
         throw error;
     }
 }

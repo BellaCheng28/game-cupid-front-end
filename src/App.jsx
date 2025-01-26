@@ -120,7 +120,6 @@ const App = () => {
             </>
           )}
           {/* Redirect unmatched routes */}
-          <Route path="*" element={<Navigate to={user ? "/" : "/sign-in"} />} />
         </Routes>
        
       </div>
