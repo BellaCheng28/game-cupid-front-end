@@ -115,9 +115,6 @@ const MatchList = () => {
        setSuccess("Block successfully added!");
        // 获取新创建的 block ID（假设后端返回了该信息）
        const newBlockId = response.id;
-        
-       // 在这里调用 handleDelete 进行删除
-       //await handleDelete(newBlockId);
 
        // 清空 blockProfile 状态
        setBlockProfile("");
