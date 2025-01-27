@@ -34,7 +34,7 @@ const Landing = () => {
                         {/* 内部白色圆环 */}
                         <div className="rounded-full bg-white w-40 h-40 md:w-56 md:h-56 flex items-center justify-center">
                           <Link
-                            to="/matches"
+                            to="/myProfile"
                             className="text-black text-lg md:text-2xl font-semibold underline flex flex-col items-center"
                           >
                             Start our Story

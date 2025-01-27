@@ -12,19 +12,19 @@ export const MatchUser = async (query) => {
 
 
 
-export const addMatchUser = async () => {
-    try {
-        const response = await api.post("profile/match/add/");
-        return response.data;
-    } catch (error) {
-        console.error("Error liking profile:", error);
-        throw error;
-    }
-}
+export const addMatchUser = async (data) => {
+  try {
+    const response = await api.post("profile/match/add/", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error liking profile:", error);
+    throw error;
+  }
+};
 
 export const showMatchUser = async () => {
   try {
-    const response = await api.post("profile/match/userId/");
+    const response = await api.get("profile/match/userId/");
     return response.data;
   } catch (error) {
     console.error("Error liking profile:", error);
@@ -33,52 +33,23 @@ export const showMatchUser = async () => {
 };
 
 
+export const addBlockUser = async (data) => {
+  try {
+    const response = await api.post("profile/block/add/", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error block profile:", error);
+    throw error;
+  }
+};
 
+export  const deleteBlockUser = async (blockId) => {
+  try {
+    const response = await api.delete(`/profile/block/${blockId}/`, { blockId });
+    return response.data;
+  } catch (error) {
+    console.error("Error blocking profile:", error);
+    throw error;
+  }
+};
 
-export  const blockProfile = async () => {
-    try {
-        const response = await api.put('/matches/block');
-        return response.data;
-    } catch (error) {
-        console.error("Error blocking profile:", error);
-        throw error;
-    }
-}
-
-export const createLikes = async (likeData) => {
-    try {
-        const response = await api.post('/matches/like/new', likeData);
-        return response.data;
-    } catch (error) {
-        console.error("Error creating like:", error);
-        throw error;
-    }
-}
-
-export const createBlocks = async (blockData) => { 
-    try {
-        const response = await api.post('/matches/block/new', blockData);
-        return response.data;
-    } catch (error) {
-        console.error("Error creating block:", error);
-        throw error;
-    }
-}
-
-export const viewLikes = async () => {
-    try {
-        const response = await api.get('/matches/like/get');
-    } catch (error) {
-        console.error("Error fetching likes:", error);
-        throw error;
-    }
-}
-
-export const getBlocks = async () => {
-    try {
-        const response = await api.get('/matches/blocks/get')
-    } catch (error) {
-        console.error("Error fetching blocks:", error);
-        throw error;
-    }
-}

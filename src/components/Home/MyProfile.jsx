@@ -51,7 +51,7 @@ const MyProfile = () => {
         <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[300px] max-h-[400px] flex-col items-center m-3">
           <h2 className="p-2">Platforms</h2>
           <div className="relative w-full flex justify-end">
-            <Link to="/brand">
+            <Link to="/platform">
               <button className="absolute -top-14 -right-4 text-white bg-blue-500 hover:bg-violet-800 p-2 rounded-full shadow-md">
                 <CiEdit />
               </button>

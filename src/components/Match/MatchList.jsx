@@ -1,23 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { MatchUser, addMatchUser } from "../../services/matcheService";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  MatchUser,
+  addMatchUser,
+  addBlockUser,
+  deleteBlockUser,
+} from "../../services/matcheService";
 import { FaRegUser } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { RiHeartAdd2Line } from "react-icons/ri";
-
-import { MdOutlineDelete } from "react-icons/md";
-
+import { MdBlock } from "react-icons/md";
+import { AuthedUserContext } from "../../App";
+import { MdDeleteOutline } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 const MatchList = () => {
-  const [matches, setMatches] = useState([]);
-  const [matchProfileGame, setMatchProfileGame] = useState('');
+  const navigate = useNavigate();
+  const { user, matches, setMatches } = useContext(AuthedUserContext);
+
+  const [matchProfile, setMatchProfile] = useState("");
+  const [blockProfile, setBlockProfile] = useState("");
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const userId = user.id;
+  console.log("userId", userId);
   useEffect(() => {
     const fetchMatches = async () => {
       try {
         const response = await MatchUser();
-        console.log(response);
+        console.log("matches", response);
         setMatches(response);
       } catch (err) {
         setError(err.message);
@@ -28,43 +38,107 @@ const MatchList = () => {
 
     fetchMatches();
   }, []);
-  console.log("matches",matches);
 
- 
-  const chooseMatchProfile = (e) => {
-    setMatchProfileGame(e.target.value);
-  };
 
-  
-  const handleSubmit = async (e) => {
+   const handleMatchClick = (matchId) => {
+     // 使用 matches.find 获取选中的 match 对象
+     const match = matches.find((m) => m.id === matchId);
+
+     if (match) {
+       setMatchProfile(match); // 更新选中的匹配用户
+       console.log("Selected match:", match);
+     } else {
+       console.log("Match not found");
+     }
+   };
+
+  const handleSubmit = async (e, userId, match) => {
     e.preventDefault();
+    if (!match || !match.id) {
+      setError("no match user!");
+      return;
+    }
+
+    const dateMatched = new Date().toISOString().split("T")[0];
+    // 创建符合后端需求的数据结构
+    const data = {
+      profile_id: userId, // 当前用户的 ID
+      match_profile_id: match.id,// 被点赞用户的 ID
+      date_matched: dateMatched, // 当前时间（ISO 格式）
+    };
+
+    console.log("data", data);
     try {
-      await addMatchUser({
-        
-      });
-      setSuccess('Match successfully added!');
-      setMatchProfileGame("");
+      await addMatchUser(data);
+      setSuccess("Match successfully added!");
+      setMatchProfile("");
+     console.log("Navigating with matchProfile:", match);
+      navigate("/like", { state: { welcome: true, matchProfile: match } });
+
     } catch (err) {
       setError(err.message);
     }
-  }
- const handleLikeClick = (match) => {
-   // Check if the game matches before adding the match
-   if (match.game === matchProfileGame) {
-     setSuccess(`Match with ${match.username} was successful!`);
-     // You can implement additional logic for updating state or backend here
-   } else {
-     setError("No match found for the selected game.");
-   }
- };
-
-  const handleDelete = (matchId) => {
-    // Handle delete logic (update state to remove the match from the list)
-    setMatches(matches.filter((match) => match.id !== matchId));
   };
 
+ const handleBlockClick = (matchId) => {
 
+   const block = matches.find((b) => b.id === matchId);
+    console.log("Selected match:", block);
+   if (block) {
+     setBlockProfile(block); // 更新选中的匹配用户
+     console.log("Selected match:", block);
+   } else {
+     console.log("Match not found");
+   }
+ }; 
 
+   const handleBlockSubmit = async (e, userId, block) => {
+     e.preventDefault();
+     console.log("Submitting match with userId:", userId);
+     console.log("block before check:", block);
+
+     if (!block || !block.id) {
+       setError("no block user!");
+       return;
+     }
+
+     const dateBlocked = new Date().toISOString().split("T")[0];
+     // 创建符合后端需求的数据结构
+     const data = {
+       profile_id: userId, // 当前用户的 ID
+       blocked_profile_id: block.id, // 被点赞用户的 ID
+       date_blocked: dateBlocked, // 当前时间（ISO 格式）
+     };
+
+     console.log("data", data);
+     try {
+       const response = await addBlockUser(data); // 假设响应中包含 block 详情，像是 `id`
+       setSuccess("Block successfully added!");
+       console.log("Block response", response);
+       // 获取新创建的 block ID（假设后端返回了该信息）
+       const newBlockId = response.id;
+        
+       // 在这里调用 handleDelete 进行删除
+       await handleDelete(newBlockId);
+
+       // 清空 blockProfile 状态
+       setBlockProfile("");
+
+     } catch (err) {
+       setError(err.message);
+     }
+   };
+
+  const handleDelete = async (blockId) => {
+    try {
+      await deleteBlockUser(blockId);
+     setMatches((prevMatches) =>
+       prevMatches.filter((block) => block.id !== blockId)
+     );
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -87,15 +161,17 @@ const MatchList = () => {
 
               {/* like and delete */}
               <div className="flex justify-between items-center w-3/4 mt-6">
+                <RiHeartAdd2Line
+                  className="cursor-pointer text-red-500 hover:text-red-600"
+                  size={30}
+                  onClick={(e) => {
+                    handleMatchClick(match.id); // 设置当前点击的 match profile ID
+                    handleSubmit(e, userId, match); // 提交数据
+                  }}
+                />
+
                 <Link
-                  to="/like"
-                  className="text-red-500 hover:text-red-600 transition duration-200"
-                  title="Like"
-                >
-                  <RiHeartAdd2Line size={30} />
-                </Link>
-                <Link
-                  to="/otherProfile"
+                  to={`/otherProfile/${match.id}`}
                   className="text-green-500 hover:text-green-700 transition duration-200"
                 >
                   ViewProfile
@@ -104,7 +180,13 @@ const MatchList = () => {
                   className="text-gray-300 hover:text-red-500 transition duration-200"
                   title="Delete"
                 >
-                  <MdOutlineDelete size={30} />
+                  <MdDeleteOutline
+                    size={30}
+                    onClick={(e) => {
+                      handleBlockClick(match.id); // 设置当前点击的 match profile ID
+                      handleBlockSubmit(e, userId, match); // 提交数据
+                    }}
+                  />
                 </button>
               </div>
             </div>

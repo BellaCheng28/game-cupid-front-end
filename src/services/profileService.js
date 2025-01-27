@@ -54,16 +54,28 @@ export const searchGames = async (query) => {
   }
 };
 
-
-export const getGames = async (query) => {
+export const getGames = async (userId) => {
   try {
-    const response = await api.get("/profile/games/", { query });
+    const response = await api.get(`/profile/games/`, {
+      params: { user_id: userId }, // 添加 user_id 到查询参数
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching profile games:", error);
     throw error;
   }
 };
+
+
+// export const getGames = async (query) => {
+//   try {
+//     const response = await api.get("/profile/games/", { query });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching profile games:", error);
+//     throw error;
+//   }
+// };
 
 
 
@@ -80,6 +92,19 @@ export const addProfileGames = async (gameData) => {
 export const editProfileGames = async (userId, gameId,gameData) => {
   try {
     const response = await api.put(`/profile/games/${gameId}/edit/`, gameData);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating profile games:", error);
+    throw error;
+  }
+};
+
+export const DeleteProfileGames = async (userId, gameId, gameData) => {
+  try {
+    const response = await api.delete(
+      `/profile/games/${gameId}/edit/`,
+      gameData
+    );
     return response.data;
   } catch (error) {
     console.error("Error updating profile games:", error);
