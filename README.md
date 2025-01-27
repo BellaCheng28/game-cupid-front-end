@@ -68,7 +68,7 @@ Join GameCupid today and level up your love life by finding your Player Two!
 ![Erd-Diagram](/public/image/ERD.png)
 
 ## Components Diagram
-![Components-Diagram](/public/image/component%20Diagram.png)
+![Components-Diagram](/public/image/Component%20Diagram%20GameCupid.jpg)
 
 ## Routing Table
 | Name             | Route                   | Use                     | Method       |
