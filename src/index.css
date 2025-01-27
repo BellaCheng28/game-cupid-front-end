@@ -1,3 +1,72 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 云朵浮动动画 */
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* 冒泡动画 */
+@keyframes bubble {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.5) translateY(-20px);
+        opacity: 0;
+    }
+}
+
+@keyframes bubble-slow {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.3) translateY(-30px);
+        opacity: 0;
+    }
+}
+
+@keyframes bubble-fast {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.8) translateY(-40px);
+        opacity: 0;
+    }
+}
+
+/* 动画类 */
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+.animate-bubble {
+    animation: bubble 3s ease-in-out infinite;
+}
+
+.animate-bubble-slow {
+    animation: bubble-slow 5s ease-in-out infinite;
+}
+
+.animate-bubble-fast {
+    animation: bubble-fast 2s ease-in-out infinite;
+}

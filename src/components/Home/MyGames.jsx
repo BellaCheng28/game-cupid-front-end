@@ -6,6 +6,7 @@ import {
   getGames,
   addProfileGames,
   editProfileGames,
+  DeleteProfileGames,
 } from "../../services/profileService";
 import { FiMenu } from "react-icons/fi";
 import { MdDeleteOutline } from "react-icons/md";
@@ -29,9 +30,9 @@ const MyGames = () => {
   }, [searchQuery]); // 每次查询变化都会触发新的请求
 
   // 获取用户的游戏
-  const fetchMyGames = async (query) => {
+  const fetchMyGames = async (userId) => {
     try {
-      const data = await getGames(query); // 获取用户的游戏
+      const data = await getGames(userId); // 获取用户的游戏
       setFavoriteGames(data); // 设置用户的游戏
     } catch (error) {
       console.error("Failed to fetch favorite games:", error);
@@ -147,7 +148,7 @@ const removeFromFavorite = async (gameId, game) => {
 
 
     // 向后端发送删除请求
-    await editProfileGames(user.id,gameId, gameData);
+    await DeleteProfileGames(user.id, gameId, gameData);
     console.log("Game removed from profile:", gameId); // 可以根据需要在这里添加日志
   } catch (error) {
     console.error("Error removing game from favorites:", error);

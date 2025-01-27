@@ -13,6 +13,7 @@ import MyProfile from "./Components/Home/myProfile";
 import { useLocation } from "react-router-dom";
 import { BsPass } from "react-icons/bs";
 import  ViewOtherProfile from "./Components/Match/ViewOtherProfile";
+import Like from "./components/Match/Like";
 import MatchList from "./Components/Match/MatchList"
 import {
   ProfileById,
@@ -33,6 +34,7 @@ const App = () => {
   const [error, setError] = useState(null);
   const [userPlatforms, setUserPlatforms] = useState([]);
   const[favoriteGames, setFavoriteGames] = useState([]);
+  const [matches, setMatches] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -98,6 +100,8 @@ const handleDeleteUser = async () => {
         setUserPlatforms,
         favoriteGames,
         setFavoriteGames,
+        matches,
+        setMatches,
       }}
     >
       <NavBar
@@ -114,13 +118,17 @@ const handleDeleteUser = async () => {
               <Route path="/profile/edit" element={<ProfileHeader />} />
               <Route path="/myprofile" element={<MyProfile />} />
               <Route path="/matches" element={<MatchList />} />
-              <Route path="/brand" element={<Platform />} />
-              {/* <Route path="/mygames" element={<MyGames />} /> */}
-
               <Route
-                path="/match/otherprofileId"
+                path="/otherProfile/:userId"
                 element={<ViewOtherProfile />}
               />
+              <Route
+                path="/otherProfile/:userId"
+                element={<ViewOtherProfile />}
+              />
+              {/* <Route path="/mygames" element={<MyGames />} /> */}
+
+              <Route path="/like" element={<Like />} />
             </>
           ) : (
             <>
