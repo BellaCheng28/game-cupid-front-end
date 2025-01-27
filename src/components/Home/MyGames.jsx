@@ -40,12 +40,17 @@ const MyGames = () => {
   };
 
   // 获取搜索结果
+  const [loading, setLoading] = useState(false);
+
   const fetchGame = async (query) => {
+    setLoading(true);
     try {
       const data = await searchGames(query); // 获取搜索数据
       setAllGames(data); // 设置所有搜索到的游戏
     } catch (error) {
       console.error("Failed to fetch AllGames:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -186,34 +191,38 @@ const removeFromFavorite = async (gameId, game) => {
 
         {/* Display search results */}
         <div className="text-white">
-          {allGames.length > 0 && (
-            <div
-              className="max-h-[300px] overflow-y-auto custom-scrollbar"
-              style={{ maxHeight: "300px" }} // 可以根据实际需要调整 maxHeight
-            >
-              <ul>
-                {allGames.map((game, index) => (
-                  <li
-                    key={index} // 使用 game.title 作为唯一标识符
-                    className="flex items-center justify-between p-2 m-2 bg-white text-violet-500 rounded"
-                  >
-                    <span className="flex-1 text-left">{game.title}</span>
-                    <span className="flex-1 text-left">{game.fav_rank}</span>
-                    <span className="flex-1 text-left">
-                      {Array.isArray(game.genre)
-                        ? game.genre.join(", ")
-                        : game.genre}
-                    </span>
-                    <button
-                      onClick={() => handleAddGame(game)} // 选择游戏并添加到收藏
-                      className="ml-2 p-1 bg-green-500 text-white rounded"
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            allGames.length > 0 && (
+              <div
+                className="max-h-[300px] overflow-y-auto custom-scrollbar"
+                style={{ maxHeight: "300px" }} // 可以根据实际需要调整 maxHeight
+              >
+                <ul>
+                  {allGames.map((game, index) => (
+                    <li
+                      key={index} // 使用 game.title 作为唯一标识符
+                      className="flex items-center justify-between p-2 m-2 bg-white text-violet-500 rounded"
                     >
-                      Select
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                      <span className="flex-1 text-left">{game.title}</span>
+                      <span className="flex-1 text-left">{game.fav_rank}</span>
+                      <span className="flex-1 text-left">
+                        {Array.isArray(game.genre)
+                          ? game.genre.join(", ")
+                          : game.genre}
+                      </span>
+                      <button
+                        onClick={() => handleAddGame(game)} // 选择游戏并添加到收藏
+                        className="ml-2 p-1 bg-green-500 text-white rounded"
+                      >
+                        Select
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
           )}
         </div>
 
