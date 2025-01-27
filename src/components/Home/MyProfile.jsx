@@ -78,11 +78,11 @@ const MyProfile = () => {
           </ul>
         </div>
         {/* Top Games */}
-        <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[300px] max-h-[400px] flex-col items-center m-3">
+        <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[400px] max-h-[400px] flex-col items-center m-3">
           <h2 className="p-2">Top Games</h2>
           <div className="relative w-full flex justify-end">
             <Link to="/mygames">
-              <button className="absolute -top-14 -right-4 text-white bg-blue-500 hover:bg-violet-800 p-2 rounded-full shadow-md">
+              <button className="absolute -top-14 -right-1 text-white bg-blue-500 hover:bg-violet-800 p-2 rounded-full shadow-md">
                 <CiEdit />
               </button>
             </Link>
@@ -91,16 +91,20 @@ const MyProfile = () => {
             {favoriteGames.map((game) => (
               <li key={game.id} className="flex justify-between items-center  ">
                 <span
-                  className="bg-blue-500 rounded-lg px-3 py-1 text-center-4 text-shadow-violet inline-block m-2"
-                  style={{ minWidth: "160px", maxWidth: "160px" }}
+                  className="bg-blue-500 rounded-lg px-2 py-1 text-center-4 text-shadow-violet inline-block m-2"
+                  style={{ minWidth: "130px", maxWidth: "130px" }}
                 >
                   {game.title}
                 </span>
                 <span
-                  className="bg-blue-500 rounded-lg px-3 py-1 text-center text-shadow-violet  inline-block m-2"
-                  style={{ minWidth: "100px", maxWidth: "100px" }}
+                  className="bg-blue-500 rounded-lg px-3 py-1 text-start text-shadow-violet  inline-block m-2"
+                  style={{ minWidth: "200px", maxWidth: "200px" }}
                 >
-                  {game.fav_rank}
+                  <span className="flex-1 text-left">
+                    {Array.isArray(game.genre)
+                      ? game.genre.join(", ")
+                      : game.genre}
+                  </span>
                 </span>
               </li>
             ))}

@@ -219,9 +219,13 @@ const removeFromFavorite = async (gameId, game) => {
                 key={game.id}
                 className="flex justify-between items-center p-2 bg-blue-500 rounded"
               >
-                <span className="flex-1 text-left">{game.title}</span>
-                <span className="flex-1 text-left">{game.fav_rank}</span>
-                <span className="flex-1 text-left">{game.genres}</span>
+                <span className="flex text-left">{game.title}</span>
+                {/* <span className="flex-1 text-left">{game.fav_rank}</span> */}
+                <span className="flex text-left">
+                  {Array.isArray(game.genre)
+                    ? game.genre.join(", ")
+                    : game.genre}
+                </span>
                 <div className="flex items-center space-x-2">
                   <button className="p-1 text-white rounded">
                     <FiMenu size={24} />
