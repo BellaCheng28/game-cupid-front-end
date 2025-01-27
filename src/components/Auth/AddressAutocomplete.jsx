@@ -11,7 +11,6 @@ const AddressAutocomplete = ({ onAddressSelect }) => {
     const url = `${BASE_URL}?q=${encodeURIComponent(
       query
     )}&key=${API_KEY}&limit=5&language=en`;
-    console.log("API Request URL:", url); 
     try {
       const response = await axios.get(url);
       const results = response.data.results.map((result) => result.formatted);

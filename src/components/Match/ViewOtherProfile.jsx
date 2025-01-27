@@ -31,8 +31,6 @@ const ViewOtherProfile = () => {
         getGames(userId),
         profilePlatforms(userId),
       ]);
-      console.log("gamedata", gamesData);
-      console.log("platformsData", platformsData);
       setGames(gamesData);
       setPlatforms(platformsData);
     } catch (err) {

@@ -22,12 +22,11 @@ const MatchList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const userId = user.id;
-  console.log("userId", userId);
+
   useEffect(() => {
     const fetchMatches = async () => {
       try {
         const response = await MatchUser();
-        console.log("matches", response);
         setMatches(response);
       } catch (err) {
         setError(err.message);
@@ -46,7 +45,6 @@ const MatchList = () => {
 
      if (match) {
        setMatchProfile(match); // 更新选中的匹配用户
-       console.log("Selected match:", match);
      } else {
        console.log("Match not found");
      }
@@ -67,12 +65,10 @@ const MatchList = () => {
       date_matched: dateMatched, // 当前时间（ISO 格式）
     };
 
-    console.log("data", data);
     try {
       await addMatchUser(data);
       setSuccess("Match successfully added!");
       setMatchProfile("");
-     console.log("Navigating with matchProfile:", match);
       navigate("/like", { state: { welcome: true, matchProfile: match } });
 
     } catch (err) {
@@ -83,10 +79,10 @@ const MatchList = () => {
  const handleBlockClick = (matchId) => {
 
    const block = matches.find((b) => b.id === matchId);
-    console.log("Selected match:", block);
+
    if (block) {
      setBlockProfile(block); // 更新选中的匹配用户
-     console.log("Selected match:", block);
+
    } else {
      console.log("Match not found");
    }
@@ -94,8 +90,6 @@ const MatchList = () => {
 
    const handleBlockSubmit = async (e, userId, block) => {
      e.preventDefault();
-     console.log("Submitting match with userId:", userId);
-     console.log("block before check:", block);
 
      if (!block || !block.id) {
        setError("no block user!");
@@ -109,12 +103,9 @@ const MatchList = () => {
        blocked_profile_id: block.id, // 被点赞用户的 ID
        date_blocked: dateBlocked, // 当前时间（ISO 格式）
      };
-
-     console.log("data", data);
      try {
        const response = await addBlockUser(data); // 假设响应中包含 block 详情，像是 `id`
        setSuccess("Block successfully added!");
-       console.log("Block response", response);
        // 获取新创建的 block ID（假设后端返回了该信息）
        const newBlockId = response.id;
         

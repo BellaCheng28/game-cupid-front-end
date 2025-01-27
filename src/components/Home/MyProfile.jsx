@@ -9,8 +9,6 @@ import { CiEdit } from "react-icons/ci";
 const MyProfile = () => {
   const { user, profile, userPlatforms, setUserPlatforms, favoriteGames } =
     useContext(AuthedUserContext);
-  // console.log("user", user);
-  // console.log("profile", profile);
   return (
     <>
       <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 flex flex-row flex-wrap justify-evenly">

@@ -5,7 +5,6 @@ const Like = () => {
   const location = useLocation();
    const welcome = location.state?.welcome || false;
    const matchProfile = location.state?.matchProfile;
-   console.log("welcome",welcome)
   return (
     <div
       className="relative flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
