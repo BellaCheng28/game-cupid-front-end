@@ -1,4 +1,4 @@
-#GameCupid
+## GameCupid
 
 **Use your love of video games as a way to meet new people**
 ## Discover Your Player Two with GameCupid
