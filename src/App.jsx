@@ -4,7 +4,6 @@ import { verifyUser, deleteUser } from "./services/authService";
 import NavBar from "./components/NavBar/NavBar";
 import SignUp from "./components/Auth/SignUp";
 import SignIn from "./components/Auth/SignIn";
-import SignOut from "./Components/Auth/SignOut";
 import MyGames from "./Components/Home/MyGames";
 import Landing from "./components/Landing/Landing";
 import Platform from "./Components/Home/Platform";
