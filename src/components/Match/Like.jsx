@@ -18,7 +18,7 @@ const Like = () => {
     >
       {welcome && (
         <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center text-center">
-          <div className="relative bg-pink-100 p-6 rounded-3xl shadow-xl max-w-md mx-auto animate-float">
+          <div className="relative bg-gradient-to-b from-purple-100 to-purple-300 p-6 rounded-3xl shadow-xl max-w-md mx-auto animate-float">
             <h1 className="text-3xl font-bold mb-2 text-violet-500 hover:text-violet-700">
               <p>☁️ Hi {matchProfile?.username || "guys"}! ☁️</p>
             </h1>
