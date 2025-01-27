@@ -41,22 +41,62 @@ Join GameCupid today and level up your love life by finding your Player Two!
 
 
 #### Sign In
-
+![Signin](/public/image/signin.jpg)
 
 #### Sign Up
-
+![SignUp](/public/image/signup.jpg)
 
 #### Welcome Page
-
+![WelcomePage](/public/image/welcome.jpg)
 
 #### Profile
+![Profile](/public/image/user-profile.jpg)
 
-
-#### Edit Profile
-
+#### Edit
+![Edit-Profile](/public/image/edit-profile.jpg)
+![Edit-Platform](/public/image/edit-platform.jpg)
+![Edit-Games](/public/image/edit-games.jpg)
 
 #### Matches
-
+![Matches](/public/image/match-profile.jpg)
 
 #### Likes
+![Likes](/public/image/like.jpg)
+
+
+## ERD
+![Erd-Diagram](/public/image/ERD.png)
+
+## Components Diagram
+![Components-Diagram](/public/image/component%20Diagram.png)
+
+## Routing Table
+| Name             | Route                   | Use                     | Method       |
+|------------------|-------------------------|-------------------------|--------------|
+| Create User      | users/register          | create a user           | POST         |
+| Login User       | users/login             | log in user             | POST         |
+| Verify User      | users/token/refresh     | verify user             | GET          |
+| Delete User      | users/:user_id          | delete user             | DELETE       |
+| View Profile     | profile/                | view own profile        | GET          |
+| View Other Profile| profile/:profile_id/   | view other profile      | GET          |
+| Edit Profile     | profile/:profile_id/edit/| edit profile           | PUT          |
+| View Profile Games| profile/games          | view profile games      | GET          |
+| Edit Profile Games| profile/games/:pk/edit | edit favorite games     | PUT/DELETE   |
+| Platform Choice View| profile/platforms/choices/| view platform choices| GET        |
+| Platform Create   | profile/platforms/:profile_id| add profile platform | POST      |
+| Edit Profile Platforms| profile/platform/:platform_id/edit | edit platforms | PUT/DELETE |
+| Search for Matches | profile/match/search/ | run match algorithm     | GET          |
+| View Matches     | profile/match/:match_id | view matched profiles   | GET          |
+| Like Profile     | profile/match/add       | like profile            | POST         |
+| Create Block     | matches/block/add       | block profile           | POST         |
+| Get Blocks       |profile/block/:block_id  | get block detail/delete | GET/DELETE   |
+
+## Project Mangement
+[GameCupid Trello Board](https://trello.com/b/JT44Zi2F/gamecupid)
+
+## GameCupid Front End Deployment
+
+
+## GameCupd Back End Deployment
+
 
