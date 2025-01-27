@@ -12,6 +12,7 @@ import { MdBlock } from "react-icons/md";
 import { AuthedUserContext } from "../../App";
 import { MdDeleteOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { ProfileById } from "../../services/profileService.js";
 const MatchList = () => {
   const navigate = useNavigate();
   const { user, matches, setMatches } = useContext(AuthedUserContext);
@@ -58,12 +59,16 @@ const MatchList = () => {
     }
 
     const dateMatched = new Date().toISOString().split("T")[0];
+    const profile = await ProfileById(userId)
+    const profileId = profile.id
     // 创建符合后端需求的数据结构
+
     const data = {
-      profile_id: userId, // 当前用户的 ID
+      profile_id: profileId, // 当前用户的 ID
       match_profile_id: match.id,// 被点赞用户的 ID
       date_matched: dateMatched, // 当前时间（ISO 格式）
     };
+    console.log(data)
 
     try {
       await addMatchUser(data);
@@ -88,7 +93,7 @@ const MatchList = () => {
    }
  }; 
 
-   const handleBlockSubmit = async (e, userId, block) => {
+ const handleBlockSubmit = async (e, userId, block) => {
      e.preventDefault();
 
      if (!block || !block.id) {
@@ -97,9 +102,11 @@ const MatchList = () => {
      }
 
      const dateBlocked = new Date().toISOString().split("T")[0];
+     const profile = await ProfileById(userId)
+     const profileId = profile.id
      // 创建符合后端需求的数据结构
      const data = {
-       profile_id: userId, // 当前用户的 ID
+       profile_id: profileId, // 当前用户的 ID
        blocked_profile_id: block.id, // 被点赞用户的 ID
        date_blocked: dateBlocked, // 当前时间（ISO 格式）
      };
@@ -110,7 +117,7 @@ const MatchList = () => {
        const newBlockId = response.id;
         
        // 在这里调用 handleDelete 进行删除
-       await handleDelete(newBlockId);
+       //await handleDelete(newBlockId);
 
        // 清空 blockProfile 状态
        setBlockProfile("");
