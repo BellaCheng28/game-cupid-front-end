@@ -47,7 +47,10 @@ const onDeleteUser = async (event) => {
             <>
               <div className="relative">
                 {/* User Icon */}
-                <div className="flex items-center space-x-4 cursor-pointer">
+                <div
+                  className="flex items-center space-x-4 cursor-pointer"
+  
+                >
                   <button onClick={toggleMenu}>
                     <FaRegUser size={24} className="text-white" />
                   </button>

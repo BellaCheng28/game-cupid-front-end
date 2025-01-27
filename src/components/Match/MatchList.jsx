@@ -132,9 +132,9 @@ const MatchList = () => {
   const handleDelete = async (blockId) => {
     try {
       await deleteBlockUser(blockId);
-     setMatches((prevMatches) =>
-       prevMatches.filter((block) => block.id !== blockId)
-     );
+       const response = await MatchUser();
+         setMatches(response);
+    
     } catch (err) {
       setError(err.message);
     }
