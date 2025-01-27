@@ -69,14 +69,12 @@ const MyGames = () => {
       genre: game.genre, // 游戏类别
       fav_rank: dynamicFavRank, // 假设你设置一个默认的 fav_rank 或者你可以动态地计算
     };
-  console.log("gameData:", gameData);
     // 添加到 favoriteGames 中
     setFavoriteGames((prevFavorites) => [...prevFavorites, game]);
   
     try {
       // 直接将游戏添加到后端
       await addProfileGames( gameData);
-      console.log("Game added to profile:", game);
     } catch (error) {
       console.error("Error adding game to favorites:", error);
     }
@@ -103,8 +101,7 @@ const MyGames = () => {
      fav_rank: index + 1, // 排序后重新分配 fav_rank
      genre: game.genre, // 保留 genre 数据
    }));
-     
-console.log("gameUpdates:", gameUpdates);
+
    try {
      // 向后端发送更新请求
      for (const gameData of gameUpdates) {
@@ -114,13 +111,9 @@ console.log("gameUpdates:", gameUpdates);
          fav_rank: gameData.fav_rank,
          genre: gameData.genre,
        };
-     console.log("gameUpdateData:", gameUpdateData);
-     console.log("gameId:", gameId);
        // 发送 PUT 请求，更新对应的游戏
       await editProfileGames(user.id, gameData.gameId, gameData);
      }
-
-     console.log("Game order updated successfully");
    } catch (error) {
      console.error("Error updating game order:", error);
    }
@@ -136,20 +129,14 @@ const removeFromFavorite = async (gameId, game) => {
   // 过滤掉要删除的游戏，更新本地状态
   const updatedFavorites = favoriteGames.filter((game) => game.id !== gameId);
   setFavoriteGames(updatedFavorites);
- console.log("gameId:", gameId);
- console.log("game:", game);
   try {
 
   const gameData = {
   title: game.title,
   fav_rank: game.fav_rank,
 };
-
-
-
     // 向后端发送删除请求
     await DeleteProfileGames(user.id, gameId, gameData);
-    console.log("Game removed from profile:", gameId); // 可以根据需要在这里添加日志
   } catch (error) {
     console.error("Error removing game from favorites:", error);
   }
@@ -158,7 +145,7 @@ const removeFromFavorite = async (gameId, game) => {
 
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 bg-fixed">
+    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-700 bg-fixed">
       <div className="container w-full mx-auto flex flex-col justify-start max-w-[800px] max-h-[800px] flex-wrap">
         {/* Search games */}
         <div className="flex items-center space-y-2">

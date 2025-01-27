@@ -85,7 +85,6 @@ const Platform = () => {
   
     try {
       const response = await addProfilePlatform(user.id,platformWithTag); // 单个请求发送数据到后端
-      console.log("Platform saved:", response);
 
       // 如果后端返回了更新后的平台数据（如带有 id），更新状态
       fetchUserPlatforms();
@@ -96,7 +95,6 @@ const Platform = () => {
 
   // 删除用户已选择的平台
   const handleDeletePlatform = async (platformId) => {
-    console.log("Deleting platform with id:", platformId);
     if (!window.confirm("Are you sure you want to delete this platform?")) {
       return;
     }
@@ -109,7 +107,6 @@ const Platform = () => {
       if (!platform) {
         throw new Error(`can not find id is ${platformId} in userPlatforms`);
       }
-      console.log("Resolved Platform ID:", platform.id);
       await editProfilePlatforms(user.id, platform.id, {
         delete: true,
       });
@@ -123,7 +120,7 @@ const Platform = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800  ">
+    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-700  ">
       <div className="container mx-auto max-w-lg p-6 bg-lightPurple rounded-lg shadow-md">
         <Link to="/myprofile" className="text-white font-bold">
           Back

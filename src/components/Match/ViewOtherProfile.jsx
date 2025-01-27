@@ -31,8 +31,6 @@ const ViewOtherProfile = () => {
         getGames(userId),
         profilePlatforms(userId),
       ]);
-      console.log("gamedata", gamesData);
-      console.log("platformsData", platformsData);
       setGames(gamesData);
       setPlatforms(platformsData);
     } catch (err) {
@@ -57,7 +55,7 @@ if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-      <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-pink-100 flex flex-row flex-wrap justify-evenly">
+      <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-700  flex flex-row flex-wrap justify-evenly">
         {/* Profile */}
         <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[300px] max-h-[400px] flex-col items-center m-3">
           <div>
@@ -120,9 +118,7 @@ if (error) return <div>Error: {error}</div>;
                   className="bg-blue-500 rounded-lg px-3 py-1 text-center text-shadow-violet inline-block m-2"
                   style={{ minWidth: "100px", maxWidth: "100px" }}
                 >
-                  {Array.isArray(game.genre)
-                    ? game.genre.join(", ")
-                    : game.genre}
+                  {game.fav_rank}
                 </span>
               </li>
             ))}

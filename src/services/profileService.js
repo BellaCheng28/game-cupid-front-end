@@ -4,7 +4,6 @@ export const viewProfile = async() => {
     try {
         
         const response = await api.get('/profile/');
-        console.log(response);
         return response.data;
        
     } catch (error) {
@@ -15,6 +14,7 @@ export const viewProfile = async() => {
 export const ProfileById = async (userId) => {
   try {
     const response = await api.get(`/profile/${userId}/`);
+    console.log(response.data.id)
     return response.data;
   } catch (error) {
     console.error("Error fetching profileById data:", error);
@@ -65,19 +65,6 @@ export const getGames = async (userId) => {
     throw error;
   }
 };
-
-
-// export const getGames = async (query) => {
-//   try {
-//     const response = await api.get("/profile/games/", { query });
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error fetching profile games:", error);
-//     throw error;
-//   }
-// };
-
-
 
 export const addProfileGames = async (gameData) => {
     try {

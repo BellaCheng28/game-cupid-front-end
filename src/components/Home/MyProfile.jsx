@@ -9,11 +9,9 @@ import { CiEdit } from "react-icons/ci";
 const MyProfile = () => {
   const { user, profile, userPlatforms, setUserPlatforms, favoriteGames } =
     useContext(AuthedUserContext);
-  // console.log("user", user);
-  // console.log("profile", profile);
   return (
     <>
-      <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 flex flex-row flex-wrap justify-evenly">
+      <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-700 flex flex-row flex-wrap justify-evenly">
         {/* Profile */}
         {profile ? (
           <div className="w-full flex p-6 text-white bg-lightPurple rounded-lg shadow-lg max-w-[300px] max-h-[400px] flex-col items-center m-3">
@@ -99,7 +97,7 @@ const MyProfile = () => {
                   {game.title}
                 </span>
                 <span
-                  className="bg-blue-500 rounded-lg px-3 py-1 text-center text-shadow-violet inline-block m-2"
+                  className="bg-blue-500 rounded-lg px-3 py-1 text-center text-shadow-violet  inline-block m-2"
                   style={{ minWidth: "100px", maxWidth: "100px" }}
                 >
                   {game.fav_rank}

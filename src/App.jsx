@@ -2,19 +2,19 @@ import { useState,createContext, useEffect } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { verifyUser, deleteUser } from "./services/authService";
 import NavBar from "./components/NavBar/NavBar";
-import SignUp from "./Components/Auth/SignUp";
-import SignIn from "./Components/Auth/SignIn";
+import SignUp from "./components/Auth/SignUp";
+import SignIn from "./components/Auth/SignIn";
 import SignOut from "./Components/Auth/SignOut";
-import MyGames from "./Components/Home/MyGames";
+import MyGames from "./components/Home/MyGames";
 import Landing from "./components/Landing/Landing";
-import Platform from "./Components/Home/Platform";
-import ProfileHeader from "./Components/Home/ProfileHeader";
-import MyProfile from "./Components/Home/myProfile";
+import Platform from "./components/Home/Platform";
+import ProfileHeader from "./components/Home/ProfileHeader";
+import MyProfile from "./components/Home/myProfile";
 import { useLocation } from "react-router-dom";
 import { BsPass } from "react-icons/bs";
-import  ViewOtherProfile from "./Components/Match/ViewOtherProfile";
+import  ViewOtherProfile from "./components/Match/ViewOtherProfile";
 import Like from "./components/Match/Like";
-import MatchList from "./Components/Match/MatchList"
+import MatchList from "./components/Match/MatchList"
 import {
   ProfileById,
   profilePlatforms,

@@ -9,11 +9,9 @@ import { editProfile } from "../../services/profileService";
 const ProfileHeader = () => {
   const { user, profile, setProfile} = useContext(AuthedUserContext);
   const navigate = useNavigate();
-//  console.log("profile", profile)
-//  console.log("user", user)
   useEffect(() => {
     if (user && user.id && !profile) {
-      console.log(user.id);
+
       const fetchProfile = async () => {
         try {
           const userId = user.id; // 获取 ID
@@ -46,7 +44,7 @@ const ProfileHeader = () => {
     try {
       await editProfile(user.id, profile);
       alert("Profile updated successfully!");
-      navigate("/");
+      navigate("/myprofile");
     } catch (error) {
       console.error("Error updating profile data:", error); // 打印详细错误
       alert("Failed to update profile. Please try again.");
