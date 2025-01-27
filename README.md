@@ -1,4 +1,4 @@
-#GameCupid
+## GameCupid
 
 **Use your love of video games as a way to meet new people**
 ## Discover Your Player Two with GameCupid
@@ -68,7 +68,7 @@ Join GameCupid today and level up your love life by finding your Player Two!
 ![Erd-Diagram](/public/image/ERD.png)
 
 ## Components Diagram
-![Components-Diagram](/public/image/component%20Diagram.png)
+![Components-Diagram](/public/image/Component%20Diagram%20GameCupid.jpg)
 
 ## Routing Table
 | Name             | Route                   | Use                     | Method       |
@@ -95,8 +95,22 @@ Join GameCupid today and level up your love life by finding your Player Two!
 [GameCupid Trello Board](https://trello.com/b/JT44Zi2F/gamecupid)
 
 ## GameCupid Front End Deployment
-
+[GameCupid Front End Deployment](https://gamecupid.netlify.app/)
 
 ## GameCupd Back End Deployment
+[GameCupid Back End Deployment](https://gamecupid-fc48081a5cff.herokuapp.com/)
 
+## Tech Used
 
+The following technologies were used to build the front end of GameCupid:
+
+- **axios**: For making HTTP requests to the backend.
+- **react**: A JavaScript library for building user interfaces.
+- **react-dom**: Provides DOM-specific methods that can be used at the top level of a web app.
+- **react-icons**: For including popular icons in the project.
+- **react-router**: Declarative routing for React.
+- **react-router-dom**: DOM bindings for React Router.
+- **react-sortablejs**: A React component for sortable lists.
+- **tailwindcss-textshadow**: A Tailwind CSS plugin for adding text shadows.
+
+These technologies were chosen to create a responsive, interactive, and user-friendly interface for GameCupid.
