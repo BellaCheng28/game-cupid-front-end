@@ -95,8 +95,8 @@ Join GameCupid today and level up your love life by finding your Player Two!
 [GameCupid Trello Board](https://trello.com/b/JT44Zi2F/gamecupid)
 
 ## GameCupid Front End Deployment
-
+[GameCupid Front End Deployment](https://gamecupid.netlify.app/)
 
 ## GameCupd Back End Deployment
-
+[GameCupid Back End Deployment](https://gamecupid-fc48081a5cff.herokuapp.com/)
 
