@@ -10,9 +10,8 @@ const Landing = () => {
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Welcome to GameCupid
             </h1>
-            <h2 className="text-lg md:text-2xl text-green-500 hover:text-green-700">
-              Find like-minded gaming partners and create your own romantic
-              legend!
+            <h2 className="text-lg text-start md:text-2xl text-green-500 hover:text-green-700">
+              Discover Your Player Two with GameCupid!
             </h2>
           </div>
         </div>
