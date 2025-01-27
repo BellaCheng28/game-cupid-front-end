@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { RiHeartAdd2Line } from "react-icons/ri";
 import { MdBlock } from "react-icons/md";
 import { AuthedUserContext } from "../../App";
-import { MdDeleteOutline } from "react-icons/md";
+import { FaHeartCircleXmark } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { ProfileById } from "../../services/profileService.js";
 const MatchList = () => {
@@ -178,7 +178,7 @@ const MatchList = () => {
                   className="text-gray-300 hover:text-red-500 transition duration-200"
                   title="Delete"
                 >
-                  <MdDeleteOutline
+                  <FaHeartCircleXmark
                     size={30}
                     onClick={(e) => {
                       handleBlockClick(match.id); // 设置当前点击的 match profile ID
