@@ -120,7 +120,7 @@ const Platform = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800  ">
+    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-700  ">
       <div className="container mx-auto max-w-lg p-6 bg-lightPurple rounded-lg shadow-md">
         <Link to="/myprofile" className="text-white font-bold">
           Back

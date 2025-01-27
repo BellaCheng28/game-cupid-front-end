@@ -145,7 +145,7 @@ const removeFromFavorite = async (gameId, game) => {
 
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-800 bg-fixed">
+    <div className="min-h-screen p-4 bg-gradient-to-b from-violet-950 to-violet-700 bg-fixed">
       <div className="container w-full mx-auto flex flex-col justify-start max-w-[800px] max-h-[800px] flex-wrap">
         {/* Search games */}
         <div className="flex items-center space-y-2">

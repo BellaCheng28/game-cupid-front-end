@@ -139,7 +139,7 @@ const MatchList = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="py-8 bg-gradient-to-b from-violet-950 to-violet-800  min-h-screen">
+    <div className="py-8 bg-gradient-to-b from-violet-950 to-violet-700  min-h-screen">
       <h1 className="text-3xl font-bold text-center text-white mb-8">
         Profile Matches
       </h1>
@@ -157,7 +157,7 @@ const MatchList = () => {
               {/* like and delete */}
               <div className="flex justify-between items-center w-3/4 mt-6">
                 <RiHeartAdd2Line
-                  className="cursor-pointer text-red-500 hover:text-red-600"
+                  className="cursor-pointer text-red-400 hover:text-red-600"
                   size={30}
                   onClick={(e) => {
                     handleMatchClick(match.id); // 设置当前点击的 match profile ID
@@ -172,7 +172,7 @@ const MatchList = () => {
                   ViewProfile
                 </Link>
                 <button
-                  className="text-gray-300 hover:text-red-500 transition duration-200"
+                  className="text-gray-300 hover:text-red-600 transition duration-200"
                   title="Delete"
                 >
                   <FaHeartCircleXmark
