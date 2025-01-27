@@ -14,7 +14,6 @@ export const viewProfile = async() => {
 export const ProfileById = async (userId) => {
   try {
     const response = await api.get(`/profile/${userId}/`);
-    console.log(response.data.id)
     return response.data;
   } catch (error) {
     console.error("Error fetching profileById data:", error);

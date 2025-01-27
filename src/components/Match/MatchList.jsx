@@ -68,7 +68,6 @@ const MatchList = () => {
       match_profile_id: match.id,// 被点赞用户的 ID
       date_matched: dateMatched, // 当前时间（ISO 格式）
     };
-    console.log(data)
 
     try {
       await addMatchUser(data);
@@ -111,13 +110,14 @@ const MatchList = () => {
        date_blocked: dateBlocked, // 当前时间（ISO 格式）
      };
      try {
-       const response = await addBlockUser(data); // 假设响应中包含 block 详情，像是 `id`
+       await addBlockUser(data); // 假设响应中包含 block 详情，像是 `id`
        setSuccess("Block successfully added!");
        // 获取新创建的 block ID（假设后端返回了该信息）
-       const newBlockId = response.id;
 
        // 清空 blockProfile 状态
        setBlockProfile("");
+       const response = await MatchUser()
+       setMatches(response);
 
      } catch (err) {
        setError(err.message);
