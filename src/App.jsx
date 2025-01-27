@@ -8,7 +8,7 @@ import MyGames from "./components/Home/MyGames";
 import Landing from "./components/Landing/Landing";
 import Platform from "./components/Home/Platform";
 import ProfileHeader from "./components/Home/ProfileHeader";
-import MyProfile from "./components/Home/myProfile";
+import MyProfile from "./components/Home/MyProfile";
 import { useLocation } from "react-router-dom";
 import { BsPass } from "react-icons/bs";
 import  ViewOtherProfile from "./components/Match/ViewOtherProfile";
